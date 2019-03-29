@@ -3,7 +3,10 @@ package com.santos.generic.NavigationDown;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -11,12 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.santos.generic.Fragmentos.DashboardFragment;
 import com.santos.generic.R;
 
 public class MainFragment extends Fragment implements View.OnClickListener {
 
     Toolbar toolbar;
     NavigationIconClickListener mNavigationIconClickListener;
+    private Fragment fragmentoGenerico = null;
+
 
     public MainFragment() {
         // Required empty public constructor
@@ -68,29 +74,57 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mo_dashboard:
-                mNavigationIconClickListener.onClick(v);
+                navigationDownDrawer(v,"Dashboard",new DashboardFragment(), true);
                 break;
             case R.id.mo_agenda:
-                mNavigationIconClickListener.onClick(v);
+                navigationDownDrawer(v,"Agenda",new DashboardFragment(), true);
                 break;
             case R.id.mo_cursos:
-                mNavigationIconClickListener.onClick(v);
+                navigationDownDrawer(v,"Cursos",new DashboardFragment(), true);
                 break;
             case R.id.mo_horarios:
-                mNavigationIconClickListener.onClick(v);
+                navigationDownDrawer(v,"Horarios",new DashboardFragment(), true);
                 break;
             case R.id.mo_tareas:
-                mNavigationIconClickListener.onClick(v);
+                navigationDownDrawer(v,"Tareas",new DashboardFragment(), true);
                 break;
             case R.id.mo_recordatorios:
-                mNavigationIconClickListener.onClick(v);
+                navigationDownDrawer(v,"Recordatorios",new DashboardFragment(), true);
                 break;
             case R.id.mo_ayuda:
-                mNavigationIconClickListener.onClick(v);
+                navigationDownDrawer(v,"Ayuda",new DashboardFragment(), true);
                 break;
             case R.id.mo_perfil:
-                mNavigationIconClickListener.onClick(v);
+                navigationDownDrawer(v,"Perfil",new DashboardFragment(), true);
                 break;
         }
     }
+
+    private void navigationDownDrawer(View v, String titulo, DashboardFragment fragment, boolean regreso) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+        mNavigationIconClickListener.onClick(v);
+        toolbar.setTitle(titulo);
+
+        fragmentoGenerico = fragment;
+
+        if (fragment != null){
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.product_grid, fragmentoGenerico)
+                    .commit();
+        }
+    }
+
+
+
+    private void showHome() {
+        fragmentoGenerico = new DashboardFragment();
+        toolbar.setTitle("Dashboard");
+        if (fragmentoGenerico != null) {
+            FragmentManager manager = getActivity().getSupportFragmentManager();
+            manager.beginTransaction().replace(R.id.product_grid, fragmentoGenerico, fragmentoGenerico.getTag()).commit();
+        }
+    }
+
 }
