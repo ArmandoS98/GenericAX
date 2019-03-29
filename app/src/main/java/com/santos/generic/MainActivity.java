@@ -5,46 +5,29 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.StorageReference;
 import com.santos.generic.Activities.LoginActivity;
 import com.santos.generic.Fragmentos.AgendaFragment;
 import com.santos.generic.Fragmentos.DashboardFragment;
-import com.santos.generic.NavigationDown.MainFragment;
 import com.santos.generic.NavigationDown.NavigationIconClickListener;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
-
-    // Constantes
-    private static final String TAG = "MainActivity";
-    public static final String KEY_NOTAS = "Valor";
 
     // Vistas
     private Fragment fragmentoGenerico = null;
     private Toolbar toolbar;
     private NavigationIconClickListener mNavigationIconClickListener;
 
-    //Firebase
-    private FirebaseAuth mAuth;
-    private GoogleApiClient mGoogleApiClient;
     private FirebaseUser firebaseUser;
-    private StorageReference mStorageReference;
+    //private StorageReference mStorageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +45,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
         transaction.commit();*/
 
-        mAuth = FirebaseAuth.getInstance();
+        //Firebase
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
@@ -111,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private void setUpToolbar() {
         toolbar = findViewById(R.id.app_bar);
         AppCompatActivity activity = this;
+
         if (activity != null) {
             activity.setSupportActionBar(toolbar);
         }
