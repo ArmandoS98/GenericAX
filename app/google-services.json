@@ -1,0 +1,247 @@
+{
+  "project_info": {
+    "project_number": "1063589098328",
+    "firebase_url": "https://trigonometria-1c5cb.firebaseio.com",
+    "project_id": "trigonometria-1c5cb",
+    "storage_bucket": "trigonometria-1c5cb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063589098328:android:13c3c6a65bcbec53",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063589098328-lvf9e1es1h5kuibhprfsj3kh1aobgcsl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myapplication",
+            "certificate_hash": "737030ba5e690eef69b6a8bdf20a87e428603b7e"
+          }
+        },
+        {
+          "client_id": "1063589098328-ubnr3sereg6ilv640qjrh2fdt1mjmqbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfaJHVl5JeSUkI1UbOAKjZR7-NKq4TJXY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063589098328-ubnr3sereg6ilv640qjrh2fdt1mjmqbn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063589098328:android:976e7d46e93b6c2f",
+        "android_client_info": {
+          "package_name": "com.santos.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063589098328-mrmi48ec2nt0dvbbebi0tab0t23v9va6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santos.dev",
+            "certificate_hash": "d98f7243aca42ac6896152c3efac30a582c82c84"
+          }
+        },
+        {
+          "client_id": "1063589098328-dnapiio3gaajefjgt8ddma4emupsprbl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santos.dev",
+            "certificate_hash": "737030ba5e690eef69b6a8bdf20a87e428603b7e"
+          }
+        },
+        {
+          "client_id": "1063589098328-ubnr3sereg6ilv640qjrh2fdt1mjmqbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfaJHVl5JeSUkI1UbOAKjZR7-NKq4TJXY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063589098328-ubnr3sereg6ilv640qjrh2fdt1mjmqbn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063589098328:android:e5a785bfcc074234",
+        "android_client_info": {
+          "package_name": "com.santos.firebasecomponents"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063589098328-ksn531sh71e5k68mbfged2dqlccii6e3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santos.firebasecomponents",
+            "certificate_hash": "d98f7243aca42ac6896152c3efac30a582c82c84"
+          }
+        },
+        {
+          "client_id": "1063589098328-3mju6eh0u4lqmcpuaab9e4j04fsie1u1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santos.firebasecomponents",
+            "certificate_hash": "737030ba5e690eef69b6a8bdf20a87e428603b7e"
+          }
+        },
+        {
+          "client_id": "1063589098328-ubnr3sereg6ilv640qjrh2fdt1mjmqbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfaJHVl5JeSUkI1UbOAKjZR7-NKq4TJXY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063589098328-ubnr3sereg6ilv640qjrh2fdt1mjmqbn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063589098328:android:6f70d4d2b1b0b538",
+        "android_client_info": {
+          "package_name": "com.santos.generic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063589098328-57dkb8c01k42gh1mmmvh52rignsuoo4r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santos.generic",
+            "certificate_hash": "d98f7243aca42ac6896152c3efac30a582c82c84"
+          }
+        },
+        {
+          "client_id": "1063589098328-ubnr3sereg6ilv640qjrh2fdt1mjmqbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfaJHVl5JeSUkI1UbOAKjZR7-NKq4TJXY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063589098328-ubnr3sereg6ilv640qjrh2fdt1mjmqbn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063589098328:android:f55f5a57cc727001",
+        "android_client_info": {
+          "package_name": "com.santos.prueba"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063589098328-j8lobt1v448f4goira2o8uh298k9o6sb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santos.prueba",
+            "certificate_hash": "d98f7243aca42ac6896152c3efac30a582c82c84"
+          }
+        },
+        {
+          "client_id": "1063589098328-ubnr3sereg6ilv640qjrh2fdt1mjmqbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfaJHVl5JeSUkI1UbOAKjZR7-NKq4TJXY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063589098328-ubnr3sereg6ilv640qjrh2fdt1mjmqbn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
