@@ -112,6 +112,50 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1063589098328:android:21cdf33aba7abb91",
+        "android_client_info": {
+          "package_name": "com.santos.firestoremeth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063589098328-q9tq5eddk4vli30inn8f6la3ps7lui1n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.santos.firestoremeth",
+            "certificate_hash": "737030ba5e690eef69b6a8bdf20a87e428603b7e"
+          }
+        },
+        {
+          "client_id": "1063589098328-ubnr3sereg6ilv640qjrh2fdt1mjmqbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfaJHVl5JeSUkI1UbOAKjZR7-NKq4TJXY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063589098328-ubnr3sereg6ilv640qjrh2fdt1mjmqbn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1063589098328:android:6f70d4d2b1b0b538",
         "android_client_info": {
           "package_name": "com.santos.generic"

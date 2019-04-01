@@ -14,12 +14,19 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.santos.firestoremeth.Models.Cursos;
+import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Activities.LoginActivity;
 import com.santos.generic.Fragmentos.AgendaFragment;
+import com.santos.generic.Fragmentos.CursosFragment;
 import com.santos.generic.Fragmentos.DashboardFragment;
+import com.santos.generic.Interfaz.IMainMaestro;
 import com.santos.generic.NavigationDown.NavigationIconClickListener;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements
+        GoogleApiClient.OnConnectionFailedListener,
+        IMainMaestro,
+        View.OnClickListener {
 
     // Vistas
     private Fragment fragmentoGenerico = null;
@@ -76,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         fragmentoGenerico = new DashboardFragment();
         //fragmentoGenerico = new FormulasFragment();
         toolbar.setTitle("Dashboard");
-        getSupportFragmentManager().beginTransaction().add(R.id.product_grid, fragmentoGenerico).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.contenedor, fragmentoGenerico).commit();
 
         // Set cut corner background for API 23+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -119,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 navigationDownDrawer(v, "Agenda", new AgendaFragment(), true);
                 break;
             case R.id.mo_cursos:
-                navigationDownDrawer(v, "Cursos", new DashboardFragment(), true);
+                navigationDownDrawer(v, "Cursos", new CursosFragment(), true);
                 break;
             case R.id.mo_horarios:
                 navigationDownDrawer(v, "Horarios", new DashboardFragment(), true);
@@ -150,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         if (fragment != null) {
             fragmentManager
                     .beginTransaction()
-                    .replace(R.id.product_grid, fragmentoGenerico)
+                    .replace(R.id.contenedor, fragmentoGenerico)
                     .commit();
         }
     }
@@ -169,7 +176,27 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         toolbar.setTitle("Dashboard");
         if (fragmentoGenerico != null) {
             FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.product_grid, fragmentoGenerico, fragmentoGenerico.getTag()).commit();
+            manager.beginTransaction().replace(R.id.contenedor, fragmentoGenerico, fragmentoGenerico.getTag()).commit();
         }
+    }
+
+    @Override
+    public void onNotaSeleccionada(Notas notas) {
+
+    }
+
+    @Override
+    public void onNotaUpdate(Notas notas) {
+
+    }
+
+    @Override
+    public void onCursotoNotaa(Cursos cursos) {
+
+    }
+
+    @Override
+    public void onNuevoCuestionario(String titulo, String content) {
+
     }
 }

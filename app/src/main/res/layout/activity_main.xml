@@ -40,12 +40,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="56dp"
-        android:background="@color/productGridBackgroundColor"
+        android:background="@drawable/shr_product_grid_background_shape"
         android:elevation="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        //dashboard
 
+        <FrameLayout
+            android:id="@+id/contenedor"
+            android:layout_marginTop="45dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
     </android.support.v4.widget.NestedScrollView>
 
 </FrameLayout>

@@ -21,4 +21,9 @@
     <string name="blmpunyakun">No tienes cuenta</string>
     <string name="loginor">O iniciar sesión con</string>
     <string name="googlelogin">Google Login</string>
+
+    <string name="subject">Curso</string>
+    <string name="teacher">Catedratico</string>
+    <string name="room">Salon</string>
+    <string name="time">Time</string>
 </resources>
