@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragmentos.CursosFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -16,6 +17,14 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:orientation="vertical" />
+
+        <com.victor.loading.rotate.RotateLoading
+            android:id="@+id/rotateloading"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            app:loading_color="@color/colorPrimaryDark"
+            app:loading_width="5dp" />
 
     </RelativeLayout>
 

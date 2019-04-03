@@ -8,7 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -17,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.santos.firestoremeth.Models.Cursos;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Activities.LoginActivity;
+import com.santos.generic.Activities.PerfilActivity;
 import com.santos.generic.Fragmentos.AgendaFragment;
 import com.santos.generic.Fragmentos.CursosFragment;
 import com.santos.generic.Fragmentos.DashboardFragment;
@@ -141,7 +146,8 @@ public class MainActivity extends AppCompatActivity implements
                 navigationDownDrawer(v, "Ayuda", new DashboardFragment(), true);
                 break;
             case R.id.mo_perfil:
-                navigationDownDrawer(v, "Perfil", new DashboardFragment(), true);
+                startActivity(new Intent(this, PerfilActivity.class));
+                mNavigationIconClickListener.onClick(v);
                 break;
         }
     }
@@ -149,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements
     private void navigationDownDrawer(View v, String titulo, Fragment fragment, boolean regreso) {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        mNavigationIconClickListener.onClick(v);
         toolbar.setTitle(titulo);
 
         fragmentoGenerico = fragment;
@@ -160,6 +165,8 @@ public class MainActivity extends AppCompatActivity implements
                     .replace(R.id.contenedor, fragmentoGenerico)
                     .commit();
         }
+
+        mNavigationIconClickListener.onClick(v);
     }
 
     @Override
@@ -192,11 +199,35 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onCursotoNotaa(Cursos cursos) {
-
+        Toast.makeText(this, cursos.getNombre_curso(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNuevoCuestionario(String titulo, String content) {
 
     }
+
+   /* @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(), NuevoCursooActivity.class));
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }*/
 }

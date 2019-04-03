@@ -1,10 +1,15 @@
 package com.santos.generic.Fragmentos;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -20,6 +25,7 @@ import com.santos.firestoremeth.FirebaseMethods;
 import com.santos.firestoremeth.Models.Cursos;
 import com.santos.generic.Adapters.AdaptadorCursos;
 import com.santos.generic.R;
+import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
 
@@ -35,12 +41,14 @@ public class CursosFragment extends Fragment {
 
     //Variables
     private DocumentSnapshot mLastQueriedDocument;
-    //private RotateLoading mRotateLoading;
+    private RotateLoading mRotateLoading;
     private AdaptadorCursos mAdaptadorNotas;
     private FirebaseAuth mAuth;
     private FirebaseUser mFirebaseUser;
     private FirebaseFirestore db;
     private CollectionReference notesCollectionRef;
+
+    private Handler handler = new Handler();
 
 
     //TODO, test de cerebro
@@ -53,7 +61,7 @@ public class CursosFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -62,9 +70,14 @@ public class CursosFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cursos, container, false);
         //mFirebaseMethods = new FirebaseMethods(getContext(), NODO_CURSOS);
-        mRecyclerViewConverciones = view.findViewById(R.id.recyclergenerico);
-        getDocumentsInf();
-        initRecyclerView();
+        mRotateLoading = view.findViewById(R.id.rotateloading);
+        mRotateLoading.start();
+
+        handler.postDelayed(() -> {
+            mRecyclerViewConverciones = view.findViewById(R.id.recyclergenerico);
+            getDocumentsInf();
+            initRecyclerView();
+        }, 100);
         return view;
     }
 
@@ -103,7 +116,7 @@ public class CursosFragment extends Fragment {
                     mLastQueriedDocument = task.getResult().getDocuments().get(task.getResult().size() - 1);
                 }
 
-                //mRotateLoading.stop();
+                mRotateLoading.stop();
                 mAdaptadorNotas.notifyDataSetChanged();
             } else {
                 Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
@@ -122,4 +135,9 @@ public class CursosFragment extends Fragment {
         mRecyclerViewConverciones.setAdapter(mAdaptadorNotas);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.shr_toolbar_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 }

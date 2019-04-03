@@ -1,6 +1,9 @@
 package com.santos.firestoremeth.Models;
 
-public class Semana {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Semana implements Parcelable {
     private String dia;
     private String curso;
     private String catedratico;
@@ -21,6 +24,28 @@ public class Semana {
         this.hora_a = hora_a;
         this.id = id;
     }
+
+    protected Semana(Parcel in) {
+        dia = in.readString();
+        curso = in.readString();
+        catedratico = in.readString();
+        salon = in.readString();
+        hora_de = in.readString();
+        hora_a = in.readString();
+        id = in.readInt();
+    }
+
+    public static final Creator<Semana> CREATOR = new Creator<Semana>() {
+        @Override
+        public Semana createFromParcel(Parcel in) {
+            return new Semana(in);
+        }
+
+        @Override
+        public Semana[] newArray(int size) {
+            return new Semana[size];
+        }
+    };
 
     public String getDia() {
         return dia;
@@ -89,5 +114,21 @@ public class Semana {
                 ", hora_a='" + hora_a + '\'' +
                 ", id=" + id +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(dia);
+        dest.writeString(curso);
+        dest.writeString(catedratico);
+        dest.writeString(salon);
+        dest.writeString(hora_de);
+        dest.writeString(hora_a);
+        dest.writeInt(id);
     }
 }

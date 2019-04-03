@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <item
+    <!--<item
         android:width="42dp"
         android:height="42dp"
         android:left="-6dp"
@@ -36,7 +36,6 @@
         </rotate>
     </item>
 
-
     <item
         android:width="1000dp"
         android:height="42dp"
@@ -53,8 +52,7 @@
         </shape>
     </item>
 
-
-    <item
+   <item
         android:width="1000dp"
         android:height="1000dp"
         android:left="29.5dp"
@@ -71,6 +69,31 @@
         <shape>
             <solid android:color="@color/productGridBackgroundColor" />
         </shape>
+    </item>-->
+
+
+    <item>
+        <shape android:shape="rectangle">
+            <corners
+                android:topLeftRadius="16dp"
+                android:topRightRadius="16dp" />
+            <gradient
+                android:angle="270"
+                android:centerColor="@color/productGridBackgroundColor"
+                android:endColor="@color/productGridBackgroundColor"
+                android:startColor="@color/productGridBackgroundColor" />
+        </shape>
     </item>
 
+
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="16dp" />
+            <gradient
+                android:angle="270"
+                android:centerColor="@color/productGridBackgroundColor"
+                android:endColor="@color/productGridBackgroundColor"
+                android:startColor="@color/productGridBackgroundColor" />
+        </shape>
+    </item>
 </layer-list>
