@@ -81,7 +81,7 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        //mFirebaseMethods = new FirebaseMethods(getContext(), NODO_CURSOS);
+
         mRotateLoading = view.findViewById(R.id.rotateloading);
         if (PreferenceHelperDemo.getSharedPreferenceBoolean(getContext(), getString(R.string.cursos_dash), false)) {
             mRotateLoading.start();

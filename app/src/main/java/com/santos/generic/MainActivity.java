@@ -89,9 +89,7 @@ public class MainActivity extends AppCompatActivity implements
                 PreferenceHelperDemo.setSharedPreferenceBoolean(this, getString(R.string.cursos_dash),false);
                 PreferenceHelperDemo.setSharedPreferenceBoolean(this, getString(R.string.notas_dash),false);
                 PreferenceHelperDemo.setSharedPreferenceBoolean(this, getString(R.string.tareas_dash),false);
-            }/*else if (isInstallFromUpdate(this)){
-                Toast.makeText(this, "Has actualizado a una version mas actualizada!", Toast.LENGTH_SHORT).show();
-            }*/
+            }
         }
 
         mNavigationIconClickListener = new NavigationIconClickListener(this, findViewById(R.id.product_grid));
