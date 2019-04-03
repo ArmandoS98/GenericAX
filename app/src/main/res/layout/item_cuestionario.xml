@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2.5dp"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_titulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="¿Que es pseudocodigo?"
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:padding="5dp"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_titulo"
+            android:hint="Respuesta"
+            android:layout_marginBottom="5dp"/>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
