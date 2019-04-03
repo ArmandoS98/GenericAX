@@ -26,4 +26,7 @@
     <string name="teacher">Catedratico</string>
     <string name="room">Salon</string>
     <string name="time">Time</string>
+    <string name="cursos_dash">si_cursos</string>
+    <string name="notas_dash">si notas</string>
+    <string name="tareas_dash">si_tareas</string>
 </resources>

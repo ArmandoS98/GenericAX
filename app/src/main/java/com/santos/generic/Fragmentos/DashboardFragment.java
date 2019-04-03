@@ -1,18 +1,24 @@
 package com.santos.generic.Fragmentos;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,6 +36,7 @@ import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Adapters.AdaptadorCursos;
 import com.santos.generic.Adapters.AdaptadorNotas;
 import com.santos.generic.R;
+import com.santos.generic.Utils.SharedPrefences.PreferenceHelperDemo;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
@@ -55,7 +62,6 @@ public class DashboardFragment extends Fragment {
     private FirebaseUser mFirebaseUser;
     private FirebaseFirestore db;
     private CollectionReference notesCollectionRef;
-    private CollectionReference mCollectionReferenceNotas;
 
     private Handler handler = new Handler();
 
@@ -77,23 +83,25 @@ public class DashboardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         //mFirebaseMethods = new FirebaseMethods(getContext(), NODO_CURSOS);
         mRotateLoading = view.findViewById(R.id.rotateloading);
-        mRotateLoading.start();
+        if (PreferenceHelperDemo.getSharedPreferenceBoolean(getContext(), getString(R.string.cursos_dash), false)) {
+            mRotateLoading.start();
+            handler.postDelayed(() -> {
+                mRecyclerViewConverciones = view.findViewById(R.id.recyclergenerico);
+                mRecyclerViewNotas = view.findViewById(R.id.recyclergenerico2);
+                getDocumentsInf();
+                initRecyclerView();
+                initRecyclerViewNotas();
+            }, 100);
+        }
 
-        handler.postDelayed(() -> {
-            mRecyclerViewConverciones = view.findViewById(R.id.recyclergenerico);
-            mRecyclerViewNotas = view.findViewById(R.id.recyclergenerico2);
-            getDocumentsInf();
-            initRecyclerView();
-            initRecyclerViewNotas();
-        }, 100);
         return view;
     }
 
     private void getNotasInf() {
-        if (mCursos.size() > 0){
+        if (mCursos.size() > 0) {
             db = FirebaseFirestore.getInstance();
 
-            for (int i = 0; i < mCursos.size(); i++){
+            for (int i = 0; i < mCursos.size(); i++) {
                 notesCollectionRef = db.collection(NODO_CURSOS)
                         .document(mCursos.get(i).getId_curso())
                         .collection(NODO_NOTAS);
@@ -120,8 +128,6 @@ public class DashboardFragment extends Fragment {
 
                         if (mNotas.size() == 0) {
                             //mTextViewNoDatos.setVisibility(View.VISIBLE);
-                        }else{
-                            Toast.makeText(getContext(), "Si trae datos", Toast.LENGTH_SHORT).show();
                         }
 
                         if (task.getResult().size() != 0) {
@@ -208,10 +214,9 @@ public class DashboardFragment extends Fragment {
                 }
 
 
-
                 if (mCursos.size() == 0) {
                     //   mTextViewNoDatos.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     getNotasInf();
                 }
 
@@ -226,6 +231,7 @@ public class DashboardFragment extends Fragment {
             }
         });
     }
+
     //Este metodo inicia el recycler view con sus componentes
     private void initRecyclerView() {
         if (mAdaptadorNotas == null) {
@@ -238,12 +244,78 @@ public class DashboardFragment extends Fragment {
     }
 
     private void initRecyclerViewNotas() {
-        if (mAdaptadorNotasReal== null) {
+        if (mAdaptadorNotasReal == null) {
             mAdaptadorNotasReal = new AdaptadorNotas(getContext(), mNotas);
         }
 
-        mRecyclerViewNotas.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerViewNotas.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         //StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, LinearLayout.VERTICAL);
         mRecyclerViewNotas.setAdapter(mAdaptadorNotasReal);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.shr_toolbar_dashboard, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.setting:
+                getDialog();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void getDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.item_pin_input, (ViewGroup) getView(), false);
+
+        final CheckBox mCheckBoxCursos = viewInflated.findViewById(R.id.chk_cursos);
+        final CheckBox mCheckBoxNotas = viewInflated.findViewById(R.id.chk_notas);
+        final CheckBox mCheckBoxTareas = viewInflated.findViewById(R.id.chk_tareas);
+        builder.setView(viewInflated);
+
+        if (PreferenceHelperDemo.getSharedPreferenceBoolean(getContext(), getString(R.string.cursos_dash), false)) {
+            mCheckBoxCursos.setChecked(true);
+        }
+        if (PreferenceHelperDemo.getSharedPreferenceBoolean(getContext(), getString(R.string.notas_dash), false)) {
+            mCheckBoxNotas.setChecked(true);
+        }
+        if (PreferenceHelperDemo.getSharedPreferenceBoolean(getContext(), getString(R.string.tareas_dash), false)) {
+            mCheckBoxTareas.setChecked(true);
+        }
+
+
+        mCheckBoxCursos.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (mCheckBoxCursos.isChecked()) {
+                PreferenceHelperDemo.setSharedPreferenceBoolean(getContext(), getString(R.string.cursos_dash), true);
+            } else {
+                PreferenceHelperDemo.setSharedPreferenceBoolean(getContext(), getString(R.string.cursos_dash), false);
+            }
+        });
+
+        mCheckBoxNotas.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (mCheckBoxNotas.isChecked()) {
+                PreferenceHelperDemo.setSharedPreferenceBoolean(getContext(), getString(R.string.notas_dash), true);
+            } else {
+                PreferenceHelperDemo.setSharedPreferenceBoolean(getContext(), getString(R.string.notas_dash), false);
+            }
+        });
+
+        mCheckBoxTareas.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (mCheckBoxTareas.isChecked()) {
+                PreferenceHelperDemo.setSharedPreferenceBoolean(getContext(), getString(R.string.tareas_dash), true);
+            } else {
+                PreferenceHelperDemo.setSharedPreferenceBoolean(getContext(), getString(R.string.tareas_dash), false);
+            }
+        });
+
+
+        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
+        builder.show();
     }
 }

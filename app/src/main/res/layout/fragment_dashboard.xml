@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_notas"
             android:clickable="true"
-            android:orientation="vertical" />
+            android:orientation="horizontal" />
 
         <com.victor.loading.rotate.RotateLoading
             android:id="@+id/rotateloading"

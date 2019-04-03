@@ -1,6 +1,9 @@
 package com.santos.generic;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -27,6 +30,7 @@ import com.santos.generic.Fragmentos.CursosFragment;
 import com.santos.generic.Fragmentos.DashboardFragment;
 import com.santos.generic.Interfaz.IMainMaestro;
 import com.santos.generic.NavigationDown.NavigationIconClickListener;
+import com.santos.generic.Utils.SharedPrefences.PreferenceHelperDemo;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -41,21 +45,32 @@ public class MainActivity extends AppCompatActivity implements
     private FirebaseUser firebaseUser;
     //private StorageReference mStorageReference;
 
+    public static boolean isFirstInstall(Context context) {
+        try {
+            long firstInstallTime = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).firstInstallTime;
+            long lastUpdateTime = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).lastUpdateTime;
+            return firstInstallTime == lastUpdateTime;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean isInstallFromUpdate(Context context) {
+        try {
+            long firstInstallTime = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).firstInstallTime;
+            long lastUpdateTime = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).lastUpdateTime;
+            return firstInstallTime != lastUpdateTime;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        /*FragmentTransaction transaction =
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, new MainFragment());
-
-        /*if (addToBackstack) {
-            transaction.addToBackStack(null);
-        }
-
-        transaction.commit();*/
 
         //Firebase
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -69,8 +84,15 @@ public class MainActivity extends AppCompatActivity implements
         //TODO: Verificacion si el usuario esta logeado.
         if (firebaseUser == null) {
             backtoLogin();
+        }else{
+            if (isFirstInstall(this)) {
+                PreferenceHelperDemo.setSharedPreferenceBoolean(this, getString(R.string.cursos_dash),false);
+                PreferenceHelperDemo.setSharedPreferenceBoolean(this, getString(R.string.notas_dash),false);
+                PreferenceHelperDemo.setSharedPreferenceBoolean(this, getString(R.string.tareas_dash),false);
+            }/*else if (isInstallFromUpdate(this)){
+                Toast.makeText(this, "Has actualizado a una version mas actualizada!", Toast.LENGTH_SHORT).show();
+            }*/
         }
-
 
         mNavigationIconClickListener = new NavigationIconClickListener(this, findViewById(R.id.product_grid));
 
@@ -205,6 +227,17 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onNuevoCuestionario(String titulo, String content) {
 
+    }
+
+    private int getFirstTimeRun() {
+        SharedPreferences sp = getSharedPreferences("MYAPP", 0);
+        int result, currentVersionCode = BuildConfig.VERSION_CODE;
+        int lastVersionCode = sp.getInt("FIRSTTIMERUN", -1);
+        if (lastVersionCode == -1) result = 0;
+        else
+            result = (lastVersionCode == currentVersionCode) ? 1 : 2;
+        sp.edit().putInt("FIRSTTIMERUN", currentVersionCode).apply();
+        return result;
     }
 
    /* @Override
