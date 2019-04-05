@@ -37,7 +37,9 @@ public class AdaptadorNotas extends RecyclerView.Adapter<AdaptadorNotas.ViewHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(mContext).inflate(R.layout.item_alumnos_layout, parent, false);
+        View itemView;
+        itemView = LayoutInflater.from(mContext).inflate(R.layout.item_alumnos_layout, parent, false);
+        itemView = LayoutInflater.from(mContext).inflate(R.layout.item_dash_notas, parent, false);
         ViewHolder holder = new ViewHolder(itemView);
         return holder;
     }
