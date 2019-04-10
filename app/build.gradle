@@ -48,5 +48,14 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     implementation 'com.victor:lib:1.0.4'
 
+    //Compresor de Imagenes
+    implementation 'id.zelory:compressor:2.1.0'
+
+    //Crop Imagen
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.+'
+
+    //change color
+    implementation 'com.github.yukuku:ambilwarna:2.0.1'
+
 }
 apply plugin: 'com.google.gms.google-services'

@@ -39,7 +39,7 @@ public class AdaptadorNotas extends RecyclerView.Adapter<AdaptadorNotas.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView;
         itemView = LayoutInflater.from(mContext).inflate(R.layout.item_alumnos_layout, parent, false);
-        itemView = LayoutInflater.from(mContext).inflate(R.layout.item_dash_notas, parent, false);
+        //itemView = LayoutInflater.from(mContext).inflate(R.layout.item_dash_notas, parent, false);
         ViewHolder holder = new ViewHolder(itemView);
         return holder;
     }
@@ -66,6 +66,7 @@ public class AdaptadorNotas extends RecyclerView.Adapter<AdaptadorNotas.ViewHold
 
         viewHolder.mteTextViewDescripcion.setText(alumnos.get(position).getDescripcionNota());
         viewHolder.mTextViewTitulo.setText(alumnos.get(position).getTituloNota());
+
         if (alumnos.get(position).getTimestamp() != null) {
             SimpleDateFormat spf = new SimpleDateFormat("MMM dd");
             String date = spf.format(alumnos.get(position).getTimestamp());

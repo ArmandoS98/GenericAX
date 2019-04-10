@@ -27,6 +27,14 @@
     <string name="room">Salon</string>
     <string name="time">Time</string>
     <string name="cursos_dash">si_cursos</string>
-    <string name="notas_dash">si notas</string>
+    <string name="notas_dash">si_notas</string>
     <string name="tareas_dash">si_tareas</string>
+    <string name="m_dashboard">Dashboard</string>
+    <string name="m_agenda">Agenda</string>
+    <string name="m_cursos">Cursos</string>
+    <string name="m_horarios">Horarios</string>
+    <string name="m_tareas">Tareas</string>
+    <string name="m_recordatorios">Recordatorios</string>
+    <string name="m_ayuda">Ayuda</string>
+    <string name="pendientes">Pendientes</string>
 </resources>

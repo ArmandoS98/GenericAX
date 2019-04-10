@@ -23,19 +23,19 @@
             android:id="@+id/chk_cursos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cursos" />
+            android:text="@string/cursos" />
 
         <CheckBox
             android:id="@+id/chk_tareas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tareas" />
+            android:text="@string/tareas" />
 
         <CheckBox
             android:id="@+id/chk_notas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Notas" />
+            android:text="@string/pendientes" />
     </LinearLayout>
 
 </FrameLayout>

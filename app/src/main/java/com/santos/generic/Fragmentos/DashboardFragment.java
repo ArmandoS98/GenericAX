@@ -84,15 +84,19 @@ public class DashboardFragment extends Fragment {
 
         mRotateLoading = view.findViewById(R.id.rotateloading);
         if (PreferenceHelperDemo.getSharedPreferenceBoolean(getContext(), getString(R.string.cursos_dash), false)) {
-            mRotateLoading.start();
+          //  mRotateLoading.start();
             handler.postDelayed(() -> {
                 mRecyclerViewConverciones = view.findViewById(R.id.recyclergenerico);
                 mRecyclerViewNotas = view.findViewById(R.id.recyclergenerico2);
-                getDocumentsInf();
-                initRecyclerView();
-                initRecyclerViewNotas();
+                //getDocumentsInf();
+                //initRecyclerView();
+                //initRecyclerViewNotas();
             }, 100);
+
         }
+
+
+
 
         return view;
     }
@@ -170,54 +174,10 @@ public class DashboardFragment extends Fragment {
                     Cursos cursos = document.toObject(Cursos.class);
                     mCursos.add(cursos);
 
-                    //Seccion de busqueda de clases
-                    /*mCollectionReferenceNotas = db.collection(NODO_CURSOS)
-                            .document(cursos.getId_curso())
-                            .collection(NODO_NOTAS);
-
-                    Query notesQueryNotas = null;
-                    if (mLastQueriedDocument != null) {
-                        notesQueryNotas = mCollectionReferenceNotas
-                                .whereEqualTo("key", "1")
-                                .startAfter(mLastQueriedDocument);
-                    } else {
-                        notesQueryNotas = mCollectionReferenceNotas
-                                .whereEqualTo("key", "1");
-                    }
-
-
-                    notesQueryNotas.get().addOnCompleteListener(task1 -> {
-                        if (task1.isSuccessful()) {
-
-                            //alumnos.clear();
-                            for (QueryDocumentSnapshot document1 : task1.getResult()) {
-                                Notas alumno = document1.toObject(Notas.class);
-                                mNotas.add(alumno);
-                            }
-
-                            Log.d(TAG, "getDocumentsInf: " + mNotas);
-
-                            if (mNotas.size() == 0) {
-                                Toast.makeText(getContext(), "Vacio", Toast.LENGTH_SHORT).show();
-                            }
-
-                            if (task1.getResult().size() != 0) {
-                                mLastQueriedDocument = task1.getResult().getDocuments().get(task1.getResult().size() - 1);
-                            }
-
-                            mRotateLoading.stop();
-                            mAdaptadorNotas.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
-                        }
-                    });*/
                 }
 
-
                 if (mCursos.size() == 0) {
-                    //   mTextViewNoDatos.setVisibility(View.VISIBLE);
-                } else {
-                    getNotasInf();
+                    //mTextViewNoDatos.setVisibility(View.VISIBLE);
                 }
 
                 if (task.getResult().size() != 0) {
@@ -274,7 +234,7 @@ public class DashboardFragment extends Fragment {
         View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.item_pin_input, (ViewGroup) getView(), false);
 
         final CheckBox mCheckBoxCursos = viewInflated.findViewById(R.id.chk_cursos);
-        final CheckBox mCheckBoxNotas = viewInflated.findViewById(R.id.chk_notas);
+        final CheckBox mCheckBoxPendientes = viewInflated.findViewById(R.id.chk_notas);
         final CheckBox mCheckBoxTareas = viewInflated.findViewById(R.id.chk_tareas);
         builder.setView(viewInflated);
 
@@ -282,7 +242,7 @@ public class DashboardFragment extends Fragment {
             mCheckBoxCursos.setChecked(true);
         }
         if (PreferenceHelperDemo.getSharedPreferenceBoolean(getContext(), getString(R.string.notas_dash), false)) {
-            mCheckBoxNotas.setChecked(true);
+            mCheckBoxPendientes.setChecked(true);
         }
         if (PreferenceHelperDemo.getSharedPreferenceBoolean(getContext(), getString(R.string.tareas_dash), false)) {
             mCheckBoxTareas.setChecked(true);
@@ -297,8 +257,8 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        mCheckBoxNotas.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (mCheckBoxNotas.isChecked()) {
+        mCheckBoxPendientes.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (mCheckBoxPendientes.isChecked()) {
                 PreferenceHelperDemo.setSharedPreferenceBoolean(getContext(), getString(R.string.notas_dash), true);
             } else {
                 PreferenceHelperDemo.setSharedPreferenceBoolean(getContext(), getString(R.string.notas_dash), false);
