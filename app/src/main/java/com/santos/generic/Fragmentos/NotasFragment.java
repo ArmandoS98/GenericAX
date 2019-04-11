@@ -59,7 +59,7 @@ public class NotasFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class NotasFragment extends Fragment {
         recyclergenerico.setAdapter(mAdaptadorNotas);
     }
 
-    @Override
+   /* @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.nueva_nota, menu);
         super.onCreateOptionsMenu(menu, inflater);
@@ -152,7 +152,7 @@ public class NotasFragment extends Fragment {
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @Override
     public void onResume() {

@@ -85,6 +85,7 @@ public class TabActivity extends AppCompatActivity implements IMainMaestro {
     private Cursos cursos = null;
     private Uri mImageUri;
     private Bitmap thumb_bitmap = null;
+    private boolean pos = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,21 +122,10 @@ public class TabActivity extends AppCompatActivity implements IMainMaestro {
                 public void onTabSelected(TabLayout.Tab tab) {
 
                     viewPager.setCurrentItem(tab.getPosition());
-                    Log.d(TAG, "onTabSelected: pos: " + tab.getPosition());
-
-                    switch (tab.getPosition()) {
-                        case 0:
-                            //Toast.makeText(GradoDetalleActivity.this, "Hola", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 1:
-                            //Toast.makeText(MangaDetalleActivity.this, "Hola No.2", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 2:
-                            //Toast.makeText(MangaDetalleActivity.this, "Hola No.3", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 3:
-                            //Toast.makeText(MangaDetalleActivity.this, "Hola No.3", Toast.LENGTH_SHORT).show();
-                            break;
+                    if (tab.getPosition() != 0) {
+                        pos = true;
+                    } else {
+                        pos = false;
                     }
                 }
 
@@ -149,6 +139,7 @@ public class TabActivity extends AppCompatActivity implements IMainMaestro {
 
                 }
             });
+
         }
     }
 
@@ -165,6 +156,8 @@ public class TabActivity extends AppCompatActivity implements IMainMaestro {
         adapter.addFrag(new NotasFragment(), "Notas");
         adapter.addFrag(new TareasFragment(), "Tareas");
         viewPager.setAdapter(adapter);
+
+
     }
 
     @Override
@@ -216,7 +209,7 @@ public class TabActivity extends AppCompatActivity implements IMainMaestro {
         }
     }
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.nueva_nota, menu);
         return super.onCreateOptionsMenu(menu);
@@ -224,26 +217,41 @@ public class TabActivity extends AppCompatActivity implements IMainMaestro {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
+        switch (item.getItemId()) {
+            case R.id.search:
+                //getDialog();
+                break;
+            case R.id.setting:
+                if (pos) {
+                    Toast.makeText(this, "Tareas", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Notas", Toast.LENGTH_SHORT).show();
+                }
+                //getDialog();
+                break;
+            case R.id.action_delete_curso:
+                //getDialog();
+                break;
+        }
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             /*Intent intent = new Intent(TabActivity.this, OptionsActivity.class);
             intent.putExtra(KEY_NOTAS, id_docuento);
             startActivity(intent);*/
-            //showTheNewDialog(R.style.DialogScale);
-            //mAdaptadorMaestrosCompleto.notifyDataSetChanged();
-            //startActivity(new Intent(getApplicationContext(), NuevoCursooActivity.class));
-            //showTheNewDialog(R.style.DialogScale);
-            //mAdaptadorMaestrosCompleto.notifyDataSetChanged();
+        //showTheNewDialog(R.style.DialogScale);
+        //mAdaptadorMaestrosCompleto.notifyDataSetChanged();
+        //startActivity(new Intent(getApplicationContext(), NuevoCursooActivity.class));
+        //showTheNewDialog(R.style.DialogScale);
+        //mAdaptadorMaestrosCompleto.notifyDataSetChanged();
             /*return true;
         } else if (id == R.id.action_color) {
             openDialog(true);
         } else if (id == R.id.action_delete_curso) {
             getDeleteGrado();
-        }
+        }*/
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 
     private void getDeleteGrado() {
         AlertDialog.Builder builder = new AlertDialog.Builder(TabActivity.this);
