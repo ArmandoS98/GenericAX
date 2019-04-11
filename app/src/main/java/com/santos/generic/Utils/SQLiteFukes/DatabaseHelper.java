@@ -9,41 +9,50 @@ import android.util.Log;
 
 import com.santos.firestoremeth.Models.Semana;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.santos.generic.Utils.SQLiteFukes.Campos.CATEDRATICO;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.CURSO;
+import static com.santos.generic.Utils.SQLiteFukes.Campos.CURSO_NAME;
+import static com.santos.generic.Utils.SQLiteFukes.Campos.DESCRIPCION_TASK;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.DIA;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.HORA_A;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.HORA_DE;
+import static com.santos.generic.Utils.SQLiteFukes.Campos.ID_CURSOO;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.ID_SEMANA;
+import static com.santos.generic.Utils.SQLiteFukes.Campos.NAME_DB;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.SALON;
+import static com.santos.generic.Utils.SQLiteFukes.Campos.TABLE_HORARIOS;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.TABLE_NAME;
+import static com.santos.generic.Utils.SQLiteFukes.Campos.TABLE_NAME_TASK;
+import static com.santos.generic.Utils.SQLiteFukes.Campos.TIMESTAMP;
+import static com.santos.generic.Utils.SQLiteFukes.Campos.TIPO_TASK;
+import static com.santos.generic.Utils.SQLiteFukes.Campos.TITULO_TASK;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     public DatabaseHelper(Context context) {
-        super(context, TABLE_NAME, null, 1);
+        super(context, NAME_DB, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE " + TABLE_NAME + " (" +
-                ID_SEMANA + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                DIA + " TEXT, " +
-                CURSO + " TEXT, " +
-                CATEDRATICO + " TEXT, " +
-                SALON + " TEXT, " +
-                HORA_DE + " TEXT, " +
-                HORA_A + " TEXT) ";
-        db.execSQL(createTable);
+
+
+        //DATETIME DEFAULT CURRENT_TIMESTAMP
+        db.execSQL(TABLE_HORARIOS);
+        db.execSQL(TABLE_NAME_TASK);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String delete = "DROP IF TABLE EXISTS ";
         db.execSQL(delete + TABLE_NAME);
+        db.execSQL(delete + TABLE_NAME_TASK);
         onCreate(db);
     }
 
@@ -60,6 +69,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d(TAG, "addData: Adding " + semana + " to " + TABLE_NAME);
 
         long result = db.insert(TABLE_NAME, null, contentValues);
+        //db.update(TABLE_NAME, contentValues, DIA, null);
+        db.close();
+
+        // db.insert(TABLE_NAME, null, contentValues);
+
+        if (result == -1) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public boolean addTaskNew(Task task) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ID_CURSOO,task.getId_curso());
+        contentValues.put(CURSO_NAME, task.getNombre_curso());
+        contentValues.put(TIMESTAMP, task.getTimestamp());
+        contentValues.put(TITULO_TASK, task.getTitulo());
+        contentValues.put(DESCRIPCION_TASK, task.getDetalle());
+        contentValues.put(TIPO_TASK, task.getTipo());
+
+        Log.d(TAG, "addData: Adding " + task + " to " + TABLE_NAME_TASK);
+
+        long result = db.insert(TABLE_NAME_TASK, null, contentValues);
         //db.update(TABLE_NAME, contentValues, DIA, null);
         db.close();
 
@@ -96,5 +131,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME, ID_SEMANA + " = ? ", new String[]{String.valueOf(semana.getId())});
         db.close();
+    }
+
+    /*
+     * Este metodo fue creada para poder manupular la fecha que se recoge del dataPicker del Dialog de crear
+     * modificar tareas para su correcta incercion en la DB
+     * su unico parametro es pasarle un dato tipo string de la fecha.
+     */
+    static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+    public Date getDateFromString(String datetoSaved) {
+
+        try {
+            Date date = format.parse(datetoSaved);
+            return date;
+        } catch (ParseException e) {
+            return null;
+        }
+
     }
 }

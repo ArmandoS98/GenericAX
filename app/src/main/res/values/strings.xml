@@ -37,4 +37,7 @@
     <string name="m_recordatorios">Recordatorios</string>
     <string name="m_ayuda">Ayuda</string>
     <string name="pendientes">Pendientes</string>
+    <string name="nueva_tarea_tittle">Nueva Tarea</string>
+    <string name="titulo_tarea">Titulo</string>
+    <string name="descripcion_tarea">Descripción</string>
 </resources>

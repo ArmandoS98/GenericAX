@@ -10,5 +10,6 @@
     <color name="secondary_light">#979797</color>
     <color name="icons_counter_color">#707070</color>
     <color name="light_gray">#d8d6d5</color>
-
+    <color name="linkBlue">#4d94ff</color>
+    <color name="red3">#e50909</color>
 </resources>

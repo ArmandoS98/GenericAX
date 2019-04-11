@@ -37,6 +37,7 @@ import com.google.firebase.storage.StorageReference;
 import com.santos.firestoremeth.FirebaseMethods;
 import com.santos.firestoremeth.Models.Cursos;
 import com.santos.firestoremeth.Models.Notas;
+import com.santos.generic.Dialogs.NuevaNotaTaskFullScreen;
 import com.santos.generic.Fragmentos.NotasFragment;
 import com.santos.generic.Fragmentos.TareasFragment;
 import com.santos.generic.Interfaz.IMainMaestro;
@@ -224,7 +225,12 @@ public class TabActivity extends AppCompatActivity implements IMainMaestro {
                 break;
             case R.id.setting:
                 if (pos) {
-                    Toast.makeText(this, "Tareas", Toast.LENGTH_SHORT).show();
+                    NuevaNotaTaskFullScreen mNuevaNotaTaskFullScreen = new NuevaNotaTaskFullScreen();
+                    mNuevaNotaTaskFullScreen.setCancelable(false);
+                    mNuevaNotaTaskFullScreen.show(getSupportFragmentManager(), "Nueva Tarea");
+                    /*Dialog_FullScreen_Cuestionario dialog_fullScreen = Dialog_FullScreen_Cuestionario.newInstance(mNote);
+                    dialog_fullScreen.setCancelable(false);
+                    dialog_fullScreen.show(getSupportFragmentManager(), "Cuestionario");*/
                 } else {
                     Toast.makeText(this, "Notas", Toast.LENGTH_SHORT).show();
                 }
