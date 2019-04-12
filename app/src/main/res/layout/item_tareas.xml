@@ -24,6 +24,8 @@
                 style="@style/TextAppearance.AppCompat.Headline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="Titutlo" />
 
             <TextView
@@ -33,6 +35,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_titulo"
                 android:layout_marginLeft="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="Hola" />
         </RelativeLayout>
 
