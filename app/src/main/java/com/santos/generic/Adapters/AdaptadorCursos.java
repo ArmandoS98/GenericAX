@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.santos.firestoremeth.Models.Cursos;
-import com.santos.generic.Interfaz.IMainMaestro;
+import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.R;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class AdaptadorCursos extends RecyclerView.Adapter<AdaptadorCursos.ViewHo
     private static final String TAG = "AdaptadorCursos";
     private Context context;
     private ArrayList<Cursos> cursos = new ArrayList<>();
-    private IMainMaestro mIMainMaestro;
+    private IDatos mIDatos;
     private int mSelectedNoteIndex;
 
     public AdaptadorCursos(Context context, ArrayList<Cursos> cursos) {
@@ -48,7 +48,7 @@ public class AdaptadorCursos extends RecyclerView.Adapter<AdaptadorCursos.ViewHo
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        mIMainMaestro = (IMainMaestro) context;
+        mIDatos = (IDatos) context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -63,7 +63,7 @@ public class AdaptadorCursos extends RecyclerView.Adapter<AdaptadorCursos.ViewHo
         @Override
         public void onClick(View v) {
             mSelectedNoteIndex = getAdapterPosition();
-            mIMainMaestro.onCursotoNotaa(cursos.get(mSelectedNoteIndex));
+            mIDatos.onCursotoNotaa(cursos.get(mSelectedNoteIndex));
         }
     }
 }

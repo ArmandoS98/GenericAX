@@ -2,7 +2,6 @@ package com.santos.generic;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -11,11 +10,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
+import com.facebook.stetho.Stetho;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -30,7 +27,7 @@ import com.santos.generic.Fragmentos.AgendaFragment;
 import com.santos.generic.Fragmentos.CursosFragment;
 import com.santos.generic.Fragmentos.DashboardFragment;
 import com.santos.generic.Fragmentos.TareasFragment;
-import com.santos.generic.Interfaz.IMainMaestro;
+import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.NavigationDown.NavigationIconClickListener;
 import com.santos.generic.Utils.SharedPrefences.PreferenceHelperDemo;
 
@@ -38,7 +35,7 @@ import static com.santos.generic.Utils.palReb.KEY_NOTAS;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
-        IMainMaestro,
+        IDatos,
         View.OnClickListener {
 
     // Vistas
@@ -75,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Stetho.initializeWithDefaults(this);
 
         //Firebase
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -230,6 +229,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onNuevoCuestionario(String titulo, String content) {
+
+    }
+
+    @Override
+    public void onNuevaTarea(String... arg) {
 
     }
 

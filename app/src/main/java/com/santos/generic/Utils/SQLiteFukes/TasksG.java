@@ -4,12 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
-import com.google.firebase.firestore.ServerTimestamp;
-
-import java.util.Date;
 
 @IgnoreExtraProperties
-public class Task implements Parcelable {
+public class TasksG implements Parcelable {
     private String id_curso;
     private String nombre_curso;
     private String timestamp;
@@ -17,10 +14,10 @@ public class Task implements Parcelable {
     private String detalle;
     private String tipo;  //Si es una TAREA|PROYECTO|INVESTIACION
 
-    public Task() {
+    public TasksG() {
     }
 
-    public Task(String id_curso, String nombre_curso, String timestamp, String titulo, String detalle, String tipo) {
+    public TasksG(String id_curso, String nombre_curso, String timestamp, String titulo, String detalle, String tipo) {
         this.id_curso = id_curso;
         this.nombre_curso = nombre_curso;
         this.timestamp = timestamp;
@@ -29,7 +26,7 @@ public class Task implements Parcelable {
         this.tipo = tipo;
     }
 
-    protected Task(Parcel in) {
+    protected TasksG(Parcel in) {
         id_curso = in.readString();
         nombre_curso = in.readString();
         timestamp = in.readString();
@@ -38,15 +35,15 @@ public class Task implements Parcelable {
         tipo = in.readString();
     }
 
-    public static final Creator<Task> CREATOR = new Creator<Task>() {
+    public static final Creator<TasksG> CREATOR = new Creator<TasksG>() {
         @Override
-        public Task createFromParcel(Parcel in) {
-            return new Task(in);
+        public TasksG createFromParcel(Parcel in) {
+            return new TasksG(in);
         }
 
         @Override
-        public Task[] newArray(int size) {
-            return new Task[size];
+        public TasksG[] newArray(int size) {
+            return new TasksG[size];
         }
     };
 

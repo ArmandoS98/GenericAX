@@ -49,7 +49,7 @@ public class Campos {
     public static final String TIMESTAMP = "timestamp";
     public static final String TITULO_TASK = "titulo_task";
     public static final String DESCRIPCION_TASK = "descripcion_task";
-    public static final String TIPO_TASK = "tipo";
+    public static final String TIPO_TASK = "tipo"; // 1 = tarea, 2 = examen, 3 = pendiente
 
     public static final String TABLE_TASK = "CREATE TABLE " + TABLE_NAME_TASK + " (" +
             ID + INTERGER_PRIMARY + COMA +

@@ -14,7 +14,7 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.santos.firestoremeth.Models.Notas;
-import com.santos.generic.Interfaz.IMainMaestro;
+import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.R;
 
 import java.text.SimpleDateFormat;
@@ -26,7 +26,7 @@ public class AdaptadorNotas extends RecyclerView.Adapter<AdaptadorNotas.ViewHold
     private static final String TAG = "AdaptadorMaestrosComple";
     private Context mContext;
     private ArrayList<Notas> alumnos = new ArrayList<>();
-    private IMainMaestro mIMainMaestro;
+    private IDatos mIDatos;
     private int mSelectedNoteIndex;
 
     public AdaptadorNotas(Context mContext, ArrayList<Notas> alumnos) {
@@ -83,7 +83,7 @@ public class AdaptadorNotas extends RecyclerView.Adapter<AdaptadorNotas.ViewHold
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        mIMainMaestro = (IMainMaestro) mContext;
+        mIDatos = (IDatos) mContext;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -108,7 +108,7 @@ public class AdaptadorNotas extends RecyclerView.Adapter<AdaptadorNotas.ViewHold
         @Override
         public void onClick(View view) {
             mSelectedNoteIndex = getAdapterPosition();
-            mIMainMaestro.onNotaSeleccionada(alumnos.get(mSelectedNoteIndex));
+            mIDatos.onNotaSeleccionada(alumnos.get(mSelectedNoteIndex));
         }
     }
 

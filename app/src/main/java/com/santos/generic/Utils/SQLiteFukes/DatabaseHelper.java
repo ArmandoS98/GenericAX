@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 
+import com.santos.firestoremeth.Models.Cursos;
 import com.santos.firestoremeth.Models.Semana;
 
 import java.text.ParseException;
@@ -28,6 +30,7 @@ import static com.santos.generic.Utils.SQLiteFukes.Campos.SALON;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.TABLE_HORARIOS;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.TABLE_NAME;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.TABLE_NAME_TASK;
+import static com.santos.generic.Utils.SQLiteFukes.Campos.TABLE_TASK;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.TIMESTAMP;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.TIPO_TASK;
 import static com.santos.generic.Utils.SQLiteFukes.Campos.TITULO_TASK;
@@ -41,11 +44,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-
         //DATETIME DEFAULT CURRENT_TIMESTAMP
         db.execSQL(TABLE_HORARIOS);
-        db.execSQL(TABLE_NAME_TASK);
+        db.execSQL(TABLE_TASK);
     }
 
     @Override
@@ -82,17 +83,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean addTaskNew(Task task) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public boolean addTaskNew(TasksG tasksG) {
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ID_CURSOO,task.getId_curso());
-        contentValues.put(CURSO_NAME, task.getNombre_curso());
-        contentValues.put(TIMESTAMP, task.getTimestamp());
-        contentValues.put(TITULO_TASK, task.getTitulo());
-        contentValues.put(DESCRIPCION_TASK, task.getDetalle());
-        contentValues.put(TIPO_TASK, task.getTipo());
+        contentValues.put(ID_CURSOO, tasksG.getId_curso());
+        contentValues.put(CURSO_NAME, tasksG.getNombre_curso());
+        contentValues.put(TIMESTAMP, tasksG.getTimestamp());
+        contentValues.put(TITULO_TASK, tasksG.getTitulo());
+        contentValues.put(DESCRIPCION_TASK, tasksG.getDetalle());
+        contentValues.put(TIPO_TASK, tasksG.getTipo());
 
-        Log.d(TAG, "addData: Adding " + task + " to " + TABLE_NAME_TASK);
+        Log.d(TAG, "addData: Adding " + tasksG + " to " + TABLE_NAME_TASK);
 
         long result = db.insert(TABLE_NAME_TASK, null, contentValues);
         //db.update(TABLE_NAME, contentValues, DIA, null);
@@ -125,6 +126,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             weeklist.add(semana);
         }
         return weeklist;
+    }
+
+    public ArrayList<TasksG> getTask() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<TasksG> mTasksGS = new ArrayList<>();
+        TasksG tasksG;
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME_TASK, null);
+
+        while (cursor.moveToNext()) {
+            tasksG = new TasksG();
+            tasksG.setId_curso(cursor.getString(cursor.getColumnIndex(ID_CURSOO)));
+            tasksG.setNombre_curso(cursor.getString(cursor.getColumnIndex(CURSO_NAME)));
+            tasksG.setTimestamp(cursor.getString(cursor.getColumnIndex(TIMESTAMP)));
+            tasksG.setTitulo(cursor.getString(cursor.getColumnIndex(TITULO_TASK)));
+            tasksG.setDetalle(cursor.getString(cursor.getColumnIndex(DESCRIPCION_TASK)));
+            tasksG.setTipo(cursor.getString(cursor.getColumnIndex(TIPO_TASK)));
+            mTasksGS.add(tasksG);
+        }
+        return mTasksGS;
     }
 
     public void deleteWeekById(Semana semana) {

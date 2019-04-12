@@ -4,8 +4,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -19,12 +17,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
@@ -32,7 +26,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.santos.firestoremeth.FirebaseMethods;
 import com.santos.firestoremeth.Models.Cursos;
@@ -40,8 +33,10 @@ import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Dialogs.NuevaNotaTaskFullScreen;
 import com.santos.generic.Fragmentos.NotasFragment;
 import com.santos.generic.Fragmentos.TareasFragment;
-import com.santos.generic.Interfaz.IMainMaestro;
+import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.R;
+import com.santos.generic.Utils.SQLiteFukes.DatabaseHelper;
+import com.santos.generic.Utils.SQLiteFukes.TasksG;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -61,7 +56,7 @@ import static com.santos.firestoremeth.Nodos.NODO_CURSOS;
 import static com.santos.firestoremeth.Nodos.NODO_NOTAS;
 import static com.santos.generic.Utils.palReb.KEY_NOTAS;
 
-public class TabActivity extends AppCompatActivity implements IMainMaestro {
+public class TabActivity extends AppCompatActivity implements IDatos {
 
     private static final String TAG = "TabActivity";
     public static final String FOTO1 = "https://firebasestorage.googleapis.com/v0/b/trigonometria-1c5cb.appspot.com/o/Imagenes%2Fnoimage.png?alt=media&token=1e1df63e-25ef-42b0-8520-3cd0992799c3";
@@ -179,6 +174,25 @@ public class TabActivity extends AppCompatActivity implements IMainMaestro {
     @Override
     public void onNuevoCuestionario(String titulo, String content) {
 
+    }
+
+    @Override
+    public void onNuevaTarea(String... arg) {
+        //Guardemos en SQLite
+        DatabaseHelper db = new DatabaseHelper(this);
+        TasksG task = new TasksG();
+        task.setTitulo(arg[0]);
+        task.setDetalle(arg[1]);
+        task.setTimestamp(arg[2]);
+        task.setId_curso(cursos.getId_curso());
+        task.setNombre_curso(cursos.getNombre_curso());
+        task.setTipo("1");
+
+        boolean insertData = db.addTaskNew(task);
+        if (insertData)
+            Toast.makeText(this, "Tareas Guardada", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
     }
 
     private static class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -524,7 +538,7 @@ public class TabActivity extends AppCompatActivity implements IMainMaestro {
                 Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
             });*/
 //---------------------------------------------------------------------------------------------------------------------
-            /*Task<Uri> urlTask = fileReference.putFile(mImageUri).continueWithTask(task -> {
+            /*TasksG<Uri> urlTask = fileReference.putFile(mImageUri).continueWithTask(task -> {
                 if (!task.isSuccessful()) {
                     throw task.getException();
                 }

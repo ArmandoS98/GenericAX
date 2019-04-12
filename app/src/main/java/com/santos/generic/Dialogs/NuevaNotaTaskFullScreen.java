@@ -1,6 +1,8 @@
 package com.santos.generic.Dialogs;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,29 +10,37 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.santos.firestoremeth.Models.Cuestionario;
 import com.santos.firestoremeth.Models.Notas;
-import com.santos.generic.Interfaz.IMainMaestro;
+import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.R;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class NuevaNotaTaskFullScreen extends DialogFragment implements View.OnClickListener {
 
-    private Notas notas;
-    private Cuestionario cuestionario;
     private EditText mEditTextTitulo;
     private EditText mEditTextContent;
-    //private TextView mTextViewSave;
-    private IMainMaestro iMainMaestro;
+    private TextView mTextViewFecha;
+
+    private IDatos iDatos;
     private Toolbar toolbar;
+
+    private String fecha_final;
+
+    private static final String CERO = "0";
+    private static final String BARRA = "/";
 
     public static NuevaNotaTaskFullScreen newInstance(Notas notas) {
         NuevaNotaTaskFullScreen dialog = new NuevaNotaTaskFullScreen();
@@ -63,6 +73,8 @@ public class NuevaNotaTaskFullScreen extends DialogFragment implements View.OnCl
 
         mEditTextTitulo = view.findViewById(R.id.et_titulo);
         mEditTextContent = view.findViewById(R.id.et_descripcion);
+        mTextViewFecha = view.findViewById(R.id.tv_view_fecha);
+        view.findViewById(R.id.linLayout1).setOnClickListener(this::onClick);
 
         //mTextViewSave.setOnClickListener(this);
 
@@ -74,6 +86,14 @@ public class NuevaNotaTaskFullScreen extends DialogFragment implements View.OnCl
         super.onViewCreated(view, savedInstanceState);
         toolbar.inflateMenu(R.menu.nueva_tarea);
         toolbar.setOnMenuItemClickListener(item -> {
+            String title = mEditTextTitulo.getText().toString();
+            String content = mEditTextContent.getText().toString();
+            if (!title.equals("") || !fecha_final.equals("") || !content.equals("")) {
+                iDatos.onNuevaTarea(title, content, fecha_final);
+                getDialog().dismiss();
+            } else {
+                Toast.makeText(getActivity(), "Todos los campos son necesarios!", Toast.LENGTH_SHORT).show();
+            }
             dismiss();
             return true;
         });
@@ -93,20 +113,53 @@ public class NuevaNotaTaskFullScreen extends DialogFragment implements View.OnCl
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        iMainMaestro = (IMainMaestro) getActivity();
+        iDatos = (IDatos) getActivity();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
 
+            case R.id.linLayout1:
+                final Calendar c = Calendar.getInstance();
+                int mHour = c.get(Calendar.HOUR_OF_DAY);
+                int mMinute = c.get(Calendar.MINUTE);
+
+
+                final int mes = c.get(Calendar.MONTH);
+                final int dia = c.get(Calendar.DAY_OF_MONTH);
+                final int anio = c.get(Calendar.YEAR);
+
+
+                /*TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
+                        (view, hourOfDay, minute) -> {
+                            from_time.setText(String.format("%02d:%02d", hourOfDay, minute));
+                            semana.setHora_de(String.format("%02d:%02d", hourOfDay, minute));
+                        }, mHour, mMinute, true);
+                timePickerDialog.setTitle(R.string.choose_time);
+                timePickerDialog.show();*/
+
+                DatePickerDialog recogerFecha = new DatePickerDialog(getContext(), (view, year, month, dayOfMonth) -> {
+                    final int mesActual = month + 1;
+                    String diaFormateado = (dayOfMonth < 10) ? CERO + String.valueOf(dayOfMonth) : String.valueOf(dayOfMonth);
+                    String mesFormateado = (mesActual < 10) ? CERO + String.valueOf(mesActual) : String.valueOf(mesActual);
+                    SimpleDateFormat sdf = new SimpleDateFormat("MMM dd");
+                    //"2018-07-31T09:27:37Z"
+                    fecha_final = year + "-" + mesFormateado + "-" + diaFormateado + "T09:27:37Z";
+                    String date = sdf.format(getDateFromString(fecha_final));
+
+                    mTextViewFecha.setText(date);
+                }, anio, mes, dia);
+                //Muestro el widget
+                recogerFecha.show();
+                break;
             /*case R.id.save: {
 
                 String title = mEditTextTitulo.getText().toString();
                 String content = mEditTextContent.getText().toString();
 
                 if (!title.equals("")) {
-                    iMainMaestro.onNuevoCuestionario(title, content);
+                    iDatos.onNuevoCuestionario(title, content);
                     getDialog().dismiss();
                 } else {
                     Toast.makeText(getActivity(), "Enter a title", Toast.LENGTH_SHORT).show();
@@ -115,6 +168,19 @@ public class NuevaNotaTaskFullScreen extends DialogFragment implements View.OnCl
             }*/
 
         }
+    }
+
+    static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+    public Date getDateFromString(String datetoSaved) {
+
+        try {
+            Date date = format.parse(datetoSaved);
+            return date;
+        } catch (ParseException e) {
+            return null;
+        }
+
     }
 
 }
