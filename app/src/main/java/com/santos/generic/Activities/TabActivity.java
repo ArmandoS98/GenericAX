@@ -83,6 +83,8 @@ public class TabActivity extends AppCompatActivity implements IDatos {
     private Bitmap thumb_bitmap = null;
     private boolean pos = false;
 
+    private ViewPagerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,7 +142,7 @@ public class TabActivity extends AppCompatActivity implements IDatos {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
         //bundle
         /*Bundle bundle = new Bundle();
         bundle.putStringArrayList("DATE", materias);*/
@@ -189,10 +191,12 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         task.setTipo("1");
 
         boolean insertData = db.addTaskNew(task);
-        if (insertData)
+        if (insertData) {
             Toast.makeText(this, "Tareas Guardada", Toast.LENGTH_SHORT).show();
-        else
+        } else
             Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+
+        adapter.notifyDataSetChanged();
     }
 
     private static class ViewPagerAdapter extends FragmentPagerAdapter {
