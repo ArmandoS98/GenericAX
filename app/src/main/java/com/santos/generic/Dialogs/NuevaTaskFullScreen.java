@@ -2,7 +2,6 @@ package com.santos.generic.Dialogs;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,13 +11,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.santos.firestoremeth.Models.Cuestionario;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.R;
@@ -28,7 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class NuevaNotaTaskFullScreen extends DialogFragment implements View.OnClickListener {
+public class NuevaTaskFullScreen extends DialogFragment implements View.OnClickListener {
 
     private EditText mEditTextTitulo;
     private EditText mEditTextContent;
@@ -42,8 +38,8 @@ public class NuevaNotaTaskFullScreen extends DialogFragment implements View.OnCl
     private static final String CERO = "0";
     private static final String BARRA = "/";
 
-    public static NuevaNotaTaskFullScreen newInstance(Notas notas) {
-        NuevaNotaTaskFullScreen dialog = new NuevaNotaTaskFullScreen();
+    public static NuevaTaskFullScreen newInstance(Notas notas) {
+        NuevaTaskFullScreen dialog = new NuevaTaskFullScreen();
 
         Bundle args = new Bundle();
         args.putParcelable("notas", notas);
@@ -62,7 +58,7 @@ public class NuevaNotaTaskFullScreen extends DialogFragment implements View.OnCl
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.nueva_notas_task, container, false);
+        View view = inflater.inflate(R.layout.dialog_fullscreen_nueva_task, container, false);
 
         toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_close_black_24dp);

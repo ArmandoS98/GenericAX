@@ -16,4 +16,8 @@ public interface IDatos {
     //Tarea
     void onNuevaTarea(String... arg);
     void onSelectTarea(TasksG tasksG);
+
+    //Nota
+    void onNuevaNota(String... arg);
+    void onSekectNota(Notas notas);
 }

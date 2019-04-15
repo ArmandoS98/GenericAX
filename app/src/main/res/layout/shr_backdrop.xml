@@ -41,14 +41,14 @@
         style="@style/Widget.Shrine.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/recordatorios" />
+        android:text="Portal" />
 
     <android.support.design.button.MaterialButton
         android:id="@+id/mo_ayuda"
         style="@style/Widget.Shrine.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/ayuda" />
+        android:text="Ajustes" />
 
     <View
         android:layout_width="56dp"

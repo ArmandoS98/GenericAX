@@ -28,6 +28,7 @@ import com.santos.generic.Activities.TareaViewActivity;
 import com.santos.generic.Fragmentos.AgendaFragment;
 import com.santos.generic.Fragmentos.CursosFragment;
 import com.santos.generic.Fragmentos.DashboardFragment;
+import com.santos.generic.Fragmentos.PortalFragment;
 import com.santos.generic.Fragmentos.TareaGFragment;
 import com.santos.generic.Fragmentos.TareasFragment;
 import com.santos.generic.Interfaz.IDatos;
@@ -55,17 +56,6 @@ public class MainActivity extends AppCompatActivity implements
             long firstInstallTime = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).firstInstallTime;
             long lastUpdateTime = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).lastUpdateTime;
             return firstInstallTime == lastUpdateTime;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean isInstallFromUpdate(Context context) {
-        try {
-            long firstInstallTime = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).firstInstallTime;
-            long lastUpdateTime = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).lastUpdateTime;
-            return firstInstallTime != lastUpdateTime;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
             return false;
@@ -165,10 +155,10 @@ public class MainActivity extends AppCompatActivity implements
                 navigationDownDrawer(v, "Tareas", new TareaGFragment(), true);
                 break;
             case R.id.mo_recordatorios:
-                navigationDownDrawer(v, "Recordatorios", new DashboardFragment(), true);
+                navigationDownDrawer(v, "Portal", new PortalFragment(), true);
                 break;
             case R.id.mo_ayuda:
-                navigationDownDrawer(v, "Ayuda", new DashboardFragment(), true);
+                navigationDownDrawer(v, "Ajustes", new DashboardFragment(), true);
                 break;
             case R.id.mo_perfil:
                 startActivity(new Intent(this, PerfilActivity.class));
@@ -244,6 +234,16 @@ public class MainActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, TareaViewActivity.class);
         intent.putExtra(KEY_NOTAS, tasksG);
         startActivity(intent);
+    }
+
+    @Override
+    public void onNuevaNota(String... arg) {
+
+    }
+
+    @Override
+    public void onSekectNota(Notas notas) {
+
     }
 
     private int getFirstTimeRun() {

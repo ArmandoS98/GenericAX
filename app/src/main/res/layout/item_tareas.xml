@@ -1,75 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="1.5dp"
     android:layout_marginBottom="1.5dp"
     android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:foreground="?android:attr/selectableItemBackground"
+    android:paddingLeft="@dimen/intrinsic_padding"
+    android:paddingRight="@dimen/intrinsic_padding"
+    app:cardElevation="0dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="5">
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+            <View
+                android:layout_width="5.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/toolbarIconColor" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3.5"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tv_titulo"
+                    style="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Titutlo" />
+
+                <TextView
+                    android:id="@+id/tv_contenido"
+                    style="@style/FirebaseUI.Text.BodyText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_titulo"
+                    android:layout_marginLeft="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Hola" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/tv_view_fecha"
+                    style="@style/Base.TextAppearance.AppCompat.Body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mar24"
+                    android:textAlignment="textEnd"
+                    android:textColor="@android:color/holo_red_dark" />
+
+                <TextView
+                    android:id="@+id/tv_completado"
+                    style="@style/Base.TextAppearance.AppCompat.Body1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_view_fecha"
+                    android:text="Mar24"
+                    android:textAlignment="textEnd"
+                    android:textColor="@android:color/darker_gray" />
+            </RelativeLayout>
+
+        </LinearLayout>
 
         <View
-            android:layout_width="5.5dp"
-            android:layout_height="match_parent"
-            android:background="@color/toolbarIconColor"/>
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/light_gray" />
+    </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3.5"
-            android:padding="15dp">
-
-            <TextView
-                android:id="@+id/tv_titulo"
-                style="@style/TextAppearance.AppCompat.Headline"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Titutlo" />
-
-            <TextView
-                android:id="@+id/tv_contenido"
-                style="@style/FirebaseUI.Text.BodyText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_titulo"
-                android:layout_marginLeft="5dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="Hola" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:padding="15dp">
-
-            <TextView
-                android:id="@+id/tv_view_fecha"
-                style="@style/Base.TextAppearance.AppCompat.Body1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Mar24"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/holo_red_dark" />
-
-            <TextView
-                android:id="@+id/tv_completado"
-                style="@style/Base.TextAppearance.AppCompat.Body1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_view_fecha"
-                android:text="Mar24"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/darker_gray" />
-        </RelativeLayout>
-    </LinearLayout>
 
 </android.support.v7.widget.CardView>

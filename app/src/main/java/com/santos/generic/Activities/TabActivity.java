@@ -30,7 +30,8 @@ import com.google.firebase.storage.StorageReference;
 import com.santos.firestoremeth.FirebaseMethods;
 import com.santos.firestoremeth.Models.Cursos;
 import com.santos.firestoremeth.Models.Notas;
-import com.santos.generic.Dialogs.NuevaNotaTaskFullScreen;
+import com.santos.generic.Dialogs.NuevaNotaFullScreen;
+import com.santos.generic.Dialogs.NuevaTaskFullScreen;
 import com.santos.generic.Fragmentos.NotasFragment;
 import com.santos.generic.Fragmentos.TareasFragment;
 import com.santos.generic.Interfaz.IDatos;
@@ -203,6 +204,16 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         startActivity(intent);
     }
 
+    @Override
+    public void onNuevaNota(String... arg) {
+
+    }
+
+    @Override
+    public void onSekectNota(Notas notas) {
+
+    }
+
     private static class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
@@ -247,14 +258,17 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                 break;
             case R.id.setting:
                 if (pos) {
-                    NuevaNotaTaskFullScreen mNuevaNotaTaskFullScreen = new NuevaNotaTaskFullScreen();
-                    mNuevaNotaTaskFullScreen.setCancelable(false);
-                    mNuevaNotaTaskFullScreen.show(getSupportFragmentManager(), "Nueva Tarea");
-                    /*Dialog_FullScreen_Cuestionario dialog_fullScreen = Dialog_FullScreen_Cuestionario.newInstance(mNote);
-                    dialog_fullScreen.setCancelable(false);
-                    dialog_fullScreen.show(getSupportFragmentManager(), "Cuestionario");*/
+                    NuevaTaskFullScreen mNuevaTaskFullScreen = new NuevaTaskFullScreen();
+                    mNuevaTaskFullScreen.setCancelable(false);
+                    mNuevaTaskFullScreen.show(getSupportFragmentManager(), "Nueva Tarea");
                 } else {
-                    Toast.makeText(this, "Notas", Toast.LENGTH_SHORT).show();
+                    NuevaNotaFullScreen mNuevaNotaFullScreen = new NuevaNotaFullScreen();
+                    mNuevaNotaFullScreen.setCancelable(false);
+                    mNuevaNotaFullScreen.show(getSupportFragmentManager(),"Nueva Nota");
+
+                    /*Intent intent = new Intent(TabActivity.this, NotasActivity.class);
+                    intent.putExtra(KEY_NOTAS, id_docuento);
+                    startActivity(intent);*/
                 }
                 //getDialog();
                 break;
@@ -262,22 +276,7 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                 //getDialog();
                 break;
         }
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            /*Intent intent = new Intent(TabActivity.this, OptionsActivity.class);
-            intent.putExtra(KEY_NOTAS, id_docuento);
-            startActivity(intent);*/
-        //showTheNewDialog(R.style.DialogScale);
-        //mAdaptadorMaestrosCompleto.notifyDataSetChanged();
-        //startActivity(new Intent(getApplicationContext(), NuevoCursooActivity.class));
-        //showTheNewDialog(R.style.DialogScale);
-        //mAdaptadorMaestrosCompleto.notifyDataSetChanged();
-            /*return true;
-        } else if (id == R.id.action_color) {
-            openDialog(true);
-        } else if (id == R.id.action_delete_curso) {
-            getDeleteGrado();
-        }*/
+
         return super.onOptionsItemSelected(item);
     }
 
