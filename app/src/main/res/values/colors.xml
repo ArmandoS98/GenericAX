@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#33333D</color>
     <color name="colorPrimaryDark">#27272F</color>
-    <color name="colorAccent">#33333D</color>
+    <color name="colorAccent">#FFCF44</color>
     <color name="toolbarIconColor">#FFCF44</color>
     <color name="productGridBackgroundColor">#FFFBFA</color>
     <color name="primary_dark_text">#28333D</color>

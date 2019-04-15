@@ -1,7 +1,9 @@
 package com.santos.generic;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -12,7 +14,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.facebook.stetho.Stetho;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,12 +24,15 @@ import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Activities.LoginActivity;
 import com.santos.generic.Activities.PerfilActivity;
 import com.santos.generic.Activities.TabActivity;
+import com.santos.generic.Activities.TareaViewActivity;
 import com.santos.generic.Fragmentos.AgendaFragment;
 import com.santos.generic.Fragmentos.CursosFragment;
 import com.santos.generic.Fragmentos.DashboardFragment;
+import com.santos.generic.Fragmentos.TareaGFragment;
 import com.santos.generic.Fragmentos.TareasFragment;
 import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.NavigationDown.NavigationIconClickListener;
+import com.santos.generic.Utils.TasksG;
 import com.santos.generic.Utils.SharedPrefences.PreferenceHelperDemo;
 
 import static com.santos.generic.Utils.palReb.KEY_NOTAS;
@@ -72,8 +76,6 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Stetho.initializeWithDefaults(this);
 
         //Firebase
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -148,25 +150,25 @@ public class MainActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mo_dashboard:
-                navigationDownDrawer(v, getString(R.string.m_dashboard), new DashboardFragment(), true);
+                navigationDownDrawer(v, "Dashboard", new DashboardFragment(), true);
                 break;
             case R.id.mo_agenda:
-                navigationDownDrawer(v, getString(R.string.m_agenda), new AgendaFragment(), true);
+                navigationDownDrawer(v, "Agenda", new AgendaFragment(), true);
                 break;
             case R.id.mo_cursos:
-                navigationDownDrawer(v, getString(R.string.m_cursos), new CursosFragment(), true);
+                navigationDownDrawer(v, "Cursos", new CursosFragment(), true);
                 break;
             case R.id.mo_horarios:
-                navigationDownDrawer(v, getString(R.string.m_horarios), new DashboardFragment(), true);
+                navigationDownDrawer(v, "Horarios", new DashboardFragment(), true);
                 break;
             case R.id.mo_tareas:
-                navigationDownDrawer(v, getString(R.string.m_tareas), new TareasFragment(), true);
+                navigationDownDrawer(v, "Tareas", new TareaGFragment(), true);
                 break;
             case R.id.mo_recordatorios:
-                navigationDownDrawer(v, getString(R.string.m_recordatorios), new DashboardFragment(), true);
+                navigationDownDrawer(v, "Recordatorios", new DashboardFragment(), true);
                 break;
             case R.id.mo_ayuda:
-                navigationDownDrawer(v, getString(R.string.m_ayuda), new DashboardFragment(), true);
+                navigationDownDrawer(v, "Ayuda", new DashboardFragment(), true);
                 break;
             case R.id.mo_perfil:
                 startActivity(new Intent(this, PerfilActivity.class));
@@ -237,4 +239,45 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    @Override
+    public void onSelectTarea(TasksG tasksG) {
+        Intent intent = new Intent(this, TareaViewActivity.class);
+        intent.putExtra(KEY_NOTAS, tasksG);
+        startActivity(intent);
+    }
+
+    private int getFirstTimeRun() {
+        SharedPreferences sp = getSharedPreferences("MYAPP", 0);
+        int result, currentVersionCode = BuildConfig.VERSION_CODE;
+        int lastVersionCode = sp.getInt("FIRSTTIMERUN", -1);
+        if (lastVersionCode == -1) result = 0;
+        else
+            result = (lastVersionCode == currentVersionCode) ? 1 : 2;
+        sp.edit().putInt("FIRSTTIMERUN", currentVersionCode).apply();
+        return result;
+    }
+
+   /* @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(), NuevoCursooActivity.class));
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }*/
 }

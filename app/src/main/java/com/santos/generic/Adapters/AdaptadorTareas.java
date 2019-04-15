@@ -7,10 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.R;
-import com.santos.generic.Utils.SQLiteFukes.TasksG;
+import com.santos.generic.Utils.TasksG;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,7 +20,8 @@ import java.util.Date;
 public class AdaptadorTareas extends RecyclerView.Adapter<AdaptadorTareas.ViewHolder> {
 
     private Context context;
-    private ArrayList<TasksG> tasksGS = new ArrayList<>();
+    private ArrayList<TasksG> tasksGS;
+    private IDatos mIDatos;
 
     public AdaptadorTareas(Context context, ArrayList<TasksG> tasksGS) {
         this.context = context;
@@ -31,8 +32,7 @@ public class AdaptadorTareas extends RecyclerView.Adapter<AdaptadorTareas.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_tareas, viewGroup, false);
-        ViewHolder holder = new ViewHolder(view);
-        return holder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -51,13 +51,19 @@ public class AdaptadorTareas extends RecyclerView.Adapter<AdaptadorTareas.ViewHo
         return tasksGS.size();
     }
 
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mIDatos = (IDatos) context;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mTextViewTitulo;
         private TextView mTextViewContendio;
         private TextView mTextViewfecha;
         private TextView mTextViewProgreso;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextViewTitulo = itemView.findViewById(R.id.tv_titulo);
             mTextViewContendio = itemView.findViewById(R.id.tv_contenido);
@@ -69,17 +75,16 @@ public class AdaptadorTareas extends RecyclerView.Adapter<AdaptadorTareas.ViewHo
 
         @Override
         public void onClick(View v) {
-            Toast.makeText(context, "Hola", Toast.LENGTH_SHORT).show();
+            mIDatos.onSelectTarea(tasksGS.get(getAdapterPosition()));
         }
     }
 
-    static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-    public Date getDateFromString(String datetoSaved) {
+    private Date getDateFromString(String datetoSaved) {
 
         try {
-            Date date = format.parse(datetoSaved);
-            return date;
+            return format.parse(datetoSaved);
         } catch (ParseException e) {
             return null;
         }

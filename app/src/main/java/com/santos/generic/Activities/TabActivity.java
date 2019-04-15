@@ -35,8 +35,8 @@ import com.santos.generic.Fragmentos.NotasFragment;
 import com.santos.generic.Fragmentos.TareasFragment;
 import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.R;
-import com.santos.generic.Utils.SQLiteFukes.DatabaseHelper;
-import com.santos.generic.Utils.SQLiteFukes.TasksG;
+import com.santos.generic.Utils.Persistence.TareaRepository;
+import com.santos.generic.Utils.TasksG;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -85,10 +85,14 @@ public class TabActivity extends AppCompatActivity implements IDatos {
 
     private ViewPagerAdapter adapter;
 
+    private TareaRepository mTareaRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
+
+        mTareaRepository = new TareaRepository(this);
 
         epicDialog = new Dialog(this);
         mAuth = FirebaseAuth.getInstance();
@@ -180,8 +184,7 @@ public class TabActivity extends AppCompatActivity implements IDatos {
 
     @Override
     public void onNuevaTarea(String... arg) {
-        //Guardemos en SQLite
-        DatabaseHelper db = new DatabaseHelper(this);
+
         TasksG task = new TasksG();
         task.setTitulo(arg[0]);
         task.setDetalle(arg[1]);
@@ -190,13 +193,14 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         task.setNombre_curso(cursos.getNombre_curso());
         task.setTipo("1");
 
-        boolean insertData = db.addTaskNew(task);
-        if (insertData) {
-            Toast.makeText(this, "Tareas Guardada", Toast.LENGTH_SHORT).show();
-        } else
-            Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show();
+        mTareaRepository.insertTask(task);
+    }
 
-        adapter.notifyDataSetChanged();
+    @Override
+    public void onSelectTarea(TasksG tasksG) {
+        Intent intent = new Intent(this, TareaViewActivity.class);
+        intent.putExtra(KEY_NOTAS, tasksG);
+        startActivity(intent);
     }
 
     private static class ViewPagerAdapter extends FragmentPagerAdapter {

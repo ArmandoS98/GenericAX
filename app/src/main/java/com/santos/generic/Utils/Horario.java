@@ -1,4 +1,4 @@
-package com.santos.generic.Utils.SQLiteFukes;
+package com.santos.generic.Utils;
 
 import android.os.Parcel;
 import android.os.Parcelable;

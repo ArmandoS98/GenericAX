@@ -21,9 +21,8 @@ import java.util.ArrayList;
 
 import static com.santos.generic.Activities.TabActivity.id_docuento;
 
+public class TareaGFragment extends Fragment {
 
-public class TareasFragment extends Fragment {
-    private static final String TAG = "TareasFragment";
     private AdaptadorTareas mAdaptadorTareas;
     private ArrayList<TasksG> mTasksGS = new ArrayList<>();
 
@@ -31,9 +30,10 @@ public class TareasFragment extends Fragment {
 
     private TareaRepository mTareaRepository;
 
-    public TareasFragment() {
+    public TareaGFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class TareasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_tareas, container, false);
+        View view = inflater.inflate(R.layout.fragment_tarea_g, container, false);
         mTareaRepository = new TareaRepository(getContext());
         mRecyclerView = view.findViewById(R.id.recycler_tareas);
         initRecyclerView();
@@ -54,7 +54,7 @@ public class TareasFragment extends Fragment {
     }
 
     private void retrieveTareas() {
-        mTareaRepository.retriveTaskCustom(id_docuento).observe(this, tasksGS -> {
+        mTareaRepository.retriveTasks().observe(this, tasksGS -> {
             if (mTasksGS.size() > 0) {
                 mTasksGS.clear();
             }
@@ -74,16 +74,6 @@ public class TareasFragment extends Fragment {
         new ItemTouchHelper(itemSimpleCallback).attachToRecyclerView(mRecyclerView);
         mAdaptadorTareas = new AdaptadorTareas(getContext(), mTasksGS);
         mRecyclerView.setAdapter(mAdaptadorTareas);
-    }
-
-    private void getDataSQLite(View view) {
-        Log.d(TAG, "getDataSQLite: ");
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setHasFixedSize(true);
-        new ItemTouchHelper(itemSimpleCallback).attachToRecyclerView(mRecyclerView);
-        //mAdaptadorTareas = new AdaptadorTareas(getContext(), databaseHelper.getTask());
-        mRecyclerView.setAdapter(mAdaptadorTareas);
-
     }
 
     private void deleteTask(TasksG tasksG) {
