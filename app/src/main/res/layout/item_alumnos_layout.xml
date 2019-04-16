@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:foreground="?android:attr/selectableItemBackground"
         card_view:cardBackgroundColor="@android:color/white"
         card_view:cardCornerRadius="2dp"
         card_view:cardElevation="@dimen/post_card_elevation"
@@ -36,8 +37,7 @@
                 android:layout_alignTop="@+id/img_ejercicio"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="@dimen/post_list_item_author_image_margin"
-                android:layout_marginRight="@dimen/intrinsic_padding"
-                 />
+                android:layout_marginRight="@dimen/intrinsic_padding" />
 
             <TextView
                 android:id="@+id/titleTextView"
@@ -48,10 +48,10 @@
                 android:layout_marginBottom="@dimen/intrinsic_padding"
                 android:layout_toStartOf="@+id/img_user"
                 android:ellipsize="end"
-                android:text="Titulo"
                 android:maxLines="1"
                 android:paddingLeft="@dimen/intrinsic_padding"
                 android:paddingRight="@dimen/intrinsic_padding"
+                android:text="Titulo"
                 android:textAppearance="@style/TextAppearance.Title" />
 
             <TextView
@@ -62,11 +62,11 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_toStartOf="@+id/img_user"
-                android:text="desc."
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:paddingLeft="@dimen/intrinsic_padding"
                 android:paddingRight="@dimen/intrinsic_padding"
+                android:text="desc."
                 android:textAppearance="@style/TextAppearance.Second" />
 
             <include

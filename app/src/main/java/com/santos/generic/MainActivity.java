@@ -23,6 +23,7 @@ import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Activities.LoginActivity;
 import com.santos.generic.Activities.PerfilActivity;
 import com.santos.generic.Activities.PortalWebActivity;
+import com.santos.generic.Activities.SettingsActivity;
 import com.santos.generic.Activities.TabActivity;
 import com.santos.generic.Activities.TareaViewActivity;
 import com.santos.generic.Fragmentos.AgendaFragment;
@@ -157,7 +158,9 @@ public class MainActivity extends AppCompatActivity implements
                 mNavigationIconClickListener.onClick(v);
                 break;
             case R.id.mo_ayuda:
-                navigationDownDrawer(v, "Ajustes", new DashboardFragment(), true);
+                //navigationDownDrawer(v, "Ajustes", new DashboardFragment(), true);
+                startActivity(new Intent(this, SettingsActivity.class));
+                mNavigationIconClickListener.onClick(v);
                 break;
             case R.id.mo_perfil:
                 startActivity(new Intent(this, PerfilActivity.class));

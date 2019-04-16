@@ -12,9 +12,16 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.santos.generic.R;
+import com.santos.generic.Utils.SharedPrefences.PreferenceHelperDemo;
+
+import static android.view.View.GONE;
 
 public class PortalWebActivity extends AppCompatActivity {
+
+    private WebView mWebView;
+    private LottieAnimationView mLottieAnimationView;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -25,10 +32,15 @@ public class PortalWebActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        WebView mWebView = findViewById(R.id.web_view);
+        mWebView = findViewById(R.id.web_view);
+        mLottieAnimationView = findViewById(R.id.animation_view);
         ProgressBar mProgressBar = findViewById(R.id.progress);
 
-        mWebView.setWebViewClient(new WebViewClient());
+        mLottieAnimationView.setAnimation(R.raw.wifi_eye);
+        mLottieAnimationView.playAnimation();
+        //mLottieAnimationView.setVisibility(GONE);
+
+        /*mWebView.setWebViewClient(new WebViewClient());
         mWebView.loadUrl("https://cursos.udvvirtual.edu.gt/");
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setVerticalScrollBarEnabled(true);
@@ -45,6 +57,15 @@ public class PortalWebActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.GONE);
                 super.onPageFinished(view, url);
             }
-        });
+        });*/
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mWebView.canGoBack()) {
+            mWebView.goBack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
