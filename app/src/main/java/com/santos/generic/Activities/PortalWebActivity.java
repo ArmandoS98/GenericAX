@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.santos.generic.R;
+import com.santos.generic.Utils.Connectivity;
 import com.santos.generic.Utils.SharedPrefences.PreferenceHelperDemo;
 
 import static android.view.View.GONE;
@@ -36,28 +37,39 @@ public class PortalWebActivity extends AppCompatActivity {
         mLottieAnimationView = findViewById(R.id.animation_view);
         ProgressBar mProgressBar = findViewById(R.id.progress);
 
-        mLottieAnimationView.setAnimation(R.raw.wifi_eye);
-        mLottieAnimationView.playAnimation();
+        mLottieAnimationView.setVisibility(GONE);
+        mProgressBar.setVisibility(GONE);
+
+        //Verificaion de internet
+        if (Connectivity.isConnectedWifi(this) || Connectivity.isConnectedMobile(this)) {
+            mWebView.setWebViewClient(new WebViewClient());
+            mWebView.loadUrl("https://cursos.udvvirtual.edu.gt/");
+            mWebView.getSettings().setJavaScriptEnabled(true);
+            mWebView.setVerticalScrollBarEnabled(true);
+            mWebView.setHorizontalScrollBarEnabled(true);
+            mWebView.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    super.onPageStarted(view, url, favicon);
+                }
+
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    mProgressBar.setVisibility(View.GONE);
+                    super.onPageFinished(view, url);
+                }
+            });
+        } else {
+            mLottieAnimationView.setAnimation(R.raw.wifi_eye);
+            mLottieAnimationView.playAnimation();
+            mLottieAnimationView.setVisibility(View.VISIBLE);
+        }
+
+
         //mLottieAnimationView.setVisibility(GONE);
 
-        /*mWebView.setWebViewClient(new WebViewClient());
-        mWebView.loadUrl("https://cursos.udvvirtual.edu.gt/");
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.setVerticalScrollBarEnabled(true);
-        mWebView.setHorizontalScrollBarEnabled(true);
-        mWebView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                mProgressBar.setVisibility(View.VISIBLE);
-                super.onPageStarted(view, url, favicon);
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                mProgressBar.setVisibility(View.GONE);
-                super.onPageFinished(view, url);
-            }
-        });*/
+        /**/
     }
 
     @Override
