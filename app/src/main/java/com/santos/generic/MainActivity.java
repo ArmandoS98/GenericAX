@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
@@ -35,7 +33,6 @@ import com.santos.generic.Fragmentos.TareaGFragment;
 import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.NavigationDown.NavigationIconClickListener;
 import com.santos.generic.Utils.Connectivity;
-import com.santos.generic.Utils.NetworkState;
 import com.santos.generic.Utils.TasksG;
 import com.santos.generic.Utils.SharedPrefences.PreferenceHelperDemo;
 
