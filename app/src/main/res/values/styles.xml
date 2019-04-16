@@ -11,6 +11,12 @@
         <item name="popupMenuStyle">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
+    <style name="Theme.Generic.Fullscreen">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <style name="Widget.Shrine.Toolbar" parent="Widget.AppCompat.Toolbar">
         <!--<item name="android:background">?attr/colorAccent</item>
         <item name="android:theme">@style/Theme.Shrine</item>
@@ -132,5 +138,17 @@
         <!-- Additionally if you want animations when dialog opening -->
         <item name="android:windowEnterAnimation">@anim/slide_up</item>
         <item name="android:windowExitAnimation">@anim/slide_down</item>
+    </style>
+
+    <style name="FullscreenTheme" parent="Theme.Generic">
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+    </style>
+
+    <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">
+        <item name="android:background">@color/black_overlay</item>
     </style>
 </resources>

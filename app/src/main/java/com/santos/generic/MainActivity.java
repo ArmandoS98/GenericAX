@@ -1,6 +1,5 @@
 package com.santos.generic;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,14 +22,13 @@ import com.santos.firestoremeth.Models.Cursos;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Activities.LoginActivity;
 import com.santos.generic.Activities.PerfilActivity;
+import com.santos.generic.Activities.PortalWebActivity;
 import com.santos.generic.Activities.TabActivity;
 import com.santos.generic.Activities.TareaViewActivity;
 import com.santos.generic.Fragmentos.AgendaFragment;
 import com.santos.generic.Fragmentos.CursosFragment;
 import com.santos.generic.Fragmentos.DashboardFragment;
-import com.santos.generic.Fragmentos.PortalFragment;
 import com.santos.generic.Fragmentos.TareaGFragment;
-import com.santos.generic.Fragmentos.TareasFragment;
 import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.NavigationDown.NavigationIconClickListener;
 import com.santos.generic.Utils.TasksG;
@@ -79,11 +77,11 @@ public class MainActivity extends AppCompatActivity implements
         //TODO: Verificacion si el usuario esta logeado.
         if (firebaseUser == null) {
             backtoLogin();
-        }else{
+        } else {
             if (isFirstInstall(this)) {
-                PreferenceHelperDemo.setSharedPreferenceBoolean(this, getString(R.string.cursos_dash),false);
-                PreferenceHelperDemo.setSharedPreferenceBoolean(this, getString(R.string.notas_dash),false);
-                PreferenceHelperDemo.setSharedPreferenceBoolean(this, getString(R.string.tareas_dash),false);
+                PreferenceHelperDemo.setSharedPreferenceBoolean(this, getString(R.string.cursos_dash), false);
+                PreferenceHelperDemo.setSharedPreferenceBoolean(this, getString(R.string.notas_dash), false);
+                PreferenceHelperDemo.setSharedPreferenceBoolean(this, getString(R.string.tareas_dash), false);
             }
         }
 
@@ -155,7 +153,8 @@ public class MainActivity extends AppCompatActivity implements
                 navigationDownDrawer(v, "Tareas", new TareaGFragment(), true);
                 break;
             case R.id.mo_recordatorios:
-                navigationDownDrawer(v, "Portal", new PortalFragment(), true);
+                startActivity(new Intent(this, PortalWebActivity.class));
+                mNavigationIconClickListener.onClick(v);
                 break;
             case R.id.mo_ayuda:
                 navigationDownDrawer(v, "Ajustes", new DashboardFragment(), true);

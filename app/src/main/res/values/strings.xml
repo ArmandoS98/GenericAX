@@ -41,4 +41,8 @@
     <string name="titulo_tarea">Titulo</string>
     <string name="descripcion_tarea">Descripción</string>
     <string name="nueva_nota">Nueva Nota</string>
+
+    <string name="title_activity_portal">PortalActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

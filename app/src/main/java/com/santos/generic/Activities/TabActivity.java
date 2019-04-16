@@ -262,13 +262,13 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                     mNuevaTaskFullScreen.setCancelable(false);
                     mNuevaTaskFullScreen.show(getSupportFragmentManager(), "Nueva Tarea");
                 } else {
-                    NuevaNotaFullScreen mNuevaNotaFullScreen = new NuevaNotaFullScreen();
+                   /* NuevaNotaFullScreen mNuevaNotaFullScreen = new NuevaNotaFullScreen();
                     mNuevaNotaFullScreen.setCancelable(false);
-                    mNuevaNotaFullScreen.show(getSupportFragmentManager(),"Nueva Nota");
+                    mNuevaNotaFullScreen.show(getSupportFragmentManager(),"Nueva Nota");*/
 
-                    /*Intent intent = new Intent(TabActivity.this, NotasActivity.class);
+                    Intent intent = new Intent(TabActivity.this, NotasActivity.class);
                     intent.putExtra(KEY_NOTAS, id_docuento);
-                    startActivity(intent);*/
+                    startActivity(intent);
                 }
                 //getDialog();
                 break;
