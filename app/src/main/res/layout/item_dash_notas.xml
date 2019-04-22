@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -31,8 +31,8 @@
                 android:layout_height="wrap_content"
                 android:text="Titulo"
                 android:textAlignment="center"
-                android:textColor="@android:color/black"
-                android:textAppearance="?attr/textAppearanceSubtitle2" />
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/product_price"
@@ -40,8 +40,8 @@
                 android:layout_height="wrap_content"
                 android:text="descripcion"
                 android:textAlignment="center"
-                android:textColor="@android:color/darker_gray"
-                android:textAppearance="?attr/textAppearanceBody2" />
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="@android:color/darker_gray" />
         </LinearLayout>
     </LinearLayout>
-</android.support.design.card.MaterialCardView>
+</com.google.android.material.card.MaterialCardView>

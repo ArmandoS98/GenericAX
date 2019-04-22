@@ -2,26 +2,21 @@ package com.santos.generic.Fragmentos;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.santos.firestoremeth.FirebaseMethods;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Adapters.AdaptadorNotas;
@@ -29,8 +24,6 @@ import com.santos.generic.R;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
-
-import javax.annotation.Nullable;
 
 import static com.santos.firestoremeth.Nodos.NODO_CURSOS;
 import static com.santos.firestoremeth.Nodos.NODO_NOTAS;

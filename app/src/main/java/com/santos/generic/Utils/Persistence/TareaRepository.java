@@ -1,7 +1,8 @@
 package com.santos.generic.Utils.Persistence;
 
-import android.arch.lifecycle.LiveData;
 import android.content.Context;
+
+import androidx.lifecycle.LiveData;
 
 import com.santos.generic.Utils.Async.DeleteAsyncTask;
 import com.santos.generic.Utils.Async.InsertAsyncTask;
@@ -29,7 +30,7 @@ public class TareaRepository {
         return mTareaDatabase.getTaskDao().getTareas();
     }
 
-    public  LiveData<List<TasksG>> retriveTaskCustom(String id_curso){
+    public LiveData<List<TasksG>> retriveTaskCustom(String id_curso){
         return mTareaDatabase.getTaskDao().getTareasCursos(id_curso);
     }
 

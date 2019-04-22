@@ -1,13 +1,14 @@
 package com.santos.generic.Adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.santos.firestoremeth.Models.Conversiones;
 import com.santos.generic.R;
@@ -26,7 +27,7 @@ public class AdapterFormulasN extends RecyclerView.Adapter<AdapterFormulasN.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.cartas, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_card_grados, viewGroup, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
