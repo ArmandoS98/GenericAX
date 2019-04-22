@@ -53,6 +53,7 @@ import java.util.Locale;
 import id.zelory.compressor.Compressor;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
+import static com.santos.firestoremeth.Nodos.KEY;
 import static com.santos.firestoremeth.Nodos.NODO_CURSOS;
 import static com.santos.firestoremeth.Nodos.NODO_NOTAS;
 import static com.santos.generic.Utils.palReb.KEY_NOTAS;
@@ -165,7 +166,20 @@ public class TabActivity extends AppCompatActivity implements IDatos {
 
     @Override
     public void onNotaSeleccionada(Notas notas) {
+        Intent intent = new Intent(this, NotaViewActivity.class);
+        intent.putExtra(KEY_NOTAS, notas);
+        String date = "";
 
+
+        if (notas.getTimestamp().toString() != null) {
+            SimpleDateFormat spf = new SimpleDateFormat("dd MMM, yyyy, HH:mm aa");
+            date = spf.format(notas.getTimestamp());
+        } else {
+            date = "Hace unos momentos";
+        }
+        intent.putExtra("date", date);
+        intent.putExtra(KEY, id_docuento);
+        startActivity(intent);
     }
 
     @Override

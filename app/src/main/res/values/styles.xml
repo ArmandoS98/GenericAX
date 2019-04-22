@@ -9,6 +9,7 @@
         <item name="android:textColorPrimary">@android:color/black</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="popupMenuStyle">@style/ThemeOverlay.AppCompat.Light</item>
+
     </style>
 
     <style name="Theme.Generic.Fullscreen">
@@ -22,7 +23,7 @@
         <item name="android:theme">@style/Theme.Shrine</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="titleTextAppearance">@style/TextAppearance.Shrine.Toolbar</item>-->
-        <item name="android:background">?attr/colorAccent</item>
+        <item name="android:background">#33333D</item>
         <item name="android:theme">@style/Theme.Generic.Dark</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="titleTextAppearance">@style/TextAppearance.Shrine.Toolbar</item>
@@ -150,5 +151,18 @@
 
     <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">
         <item name="android:background">@color/black_overlay</item>
+    </style>
+
+    <style name="DialogScale">
+        <item name="android:windowEnterAnimation">@anim/scale_in</item>
+        <item name="android:windowExitAnimation">@anim/scale_out</item>
+    </style>
+
+    <style name="Widget.CardContent" parent="android:Widget">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">24dp</item>
+        <item name="android:orientation">vertical</item>
     </style>
 </resources>

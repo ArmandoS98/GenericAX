@@ -29,5 +29,5 @@ public class Nodos {
     public static final String IDENTIFICADOR_USUARIO = "id_user_settings"; //id_user_settings
 
     //VAR PARA NUESTROS INTENTES
-    public static final String KEY ="dato";
+    public static final String KEY = "dato";
 }
