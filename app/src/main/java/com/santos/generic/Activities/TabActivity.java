@@ -26,10 +26,16 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.santos.firestoremeth.FirebaseMethods;
+import com.santos.firestoremeth.Models.ArchivosAniadidos;
+import com.santos.firestoremeth.Models.Cuestionario;
 import com.santos.firestoremeth.Models.Cursos;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Dialogs.NuevaTaskFullScreen;
@@ -55,7 +61,9 @@ import id.zelory.compressor.Compressor;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 import static com.santos.firestoremeth.Nodos.KEY;
+import static com.santos.firestoremeth.Nodos.NODO_CUESTIONARIO;
 import static com.santos.firestoremeth.Nodos.NODO_CURSOS;
+import static com.santos.firestoremeth.Nodos.NODO_IMAGENES_ANIADIDAS;
 import static com.santos.firestoremeth.Nodos.NODO_NOTAS;
 import static com.santos.generic.Utils.palReb.KEY_NOTAS;
 
@@ -113,6 +121,7 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         if (cursos != null) {
 
             id_docuento = cursos.getId_curso();
+            getNotasGrado();
 
             //Donde se carggaran las tabs
             viewPager = findViewById(R.id.htab_viewpager);
@@ -264,6 +273,10 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         return super.onCreateOptionsMenu(menu);
     }
 
+    private CollectionReference notesCollectionRef;
+    private ArrayList<Notas> alumnos = new ArrayList<>();
+    private DocumentSnapshot mLastQueriedDocument;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -277,22 +290,159 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                     mNuevaTaskFullScreen.setCancelable(false);
                     mNuevaTaskFullScreen.show(getSupportFragmentManager(), "Nueva Tarea");
                 } else {
-                   /* NuevaNotaFullScreen mNuevaNotaFullScreen = new NuevaNotaFullScreen();
-                    mNuevaNotaFullScreen.setCancelable(false);
-                    mNuevaNotaFullScreen.show(getSupportFragmentManager(),"Nueva Nota");*/
-
                     Intent intent = new Intent(TabActivity.this, NotasActivity.class);
                     intent.putExtra(KEY_NOTAS, id_docuento);
                     startActivity(intent);
                 }
-                //getDialog();
                 break;
             case R.id.action_delete_curso:
-                //getDialog();
+                if (getNotasGrado()) {
+                    for (Notas notas : alumnos) {
+                        Toast.makeText(this, notas.getTituloNota(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+//                    deleteGrado();
+                else
+                    Toast.makeText(this, getString(R.string.mensaje_eleminacion_fallido), Toast.LENGTH_SHORT).show();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    boolean status = false;
+
+    private boolean getNotasGrado() {
+
+        db = FirebaseFirestore.getInstance();
+
+        notesCollectionRef = db.collection(NODO_CURSOS)
+                .document(id_docuento)
+                .collection(NODO_NOTAS);
+
+        Query notesQuery = null;
+        if (mLastQueriedDocument != null) {
+            notesQuery = notesCollectionRef
+                    .whereEqualTo("key", "1")
+                    .startAfter(mLastQueriedDocument);
+        } else {
+            notesQuery = notesCollectionRef
+                    .whereEqualTo("key", "1");
+        }
+
+
+        notesQuery.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+
+                alumnos.clear();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Notas alumno = document.toObject(Notas.class);
+                    alumnos.add(alumno);
+                }
+
+
+                for (int i = 0; i < alumnos.size(); i++) {
+                    getCuestionario(alumnos.get(i).getIdNota());
+                    getImagenAniadidas(alumnos.get(i).getIdNota());
+                }
+
+                status = true;
+
+                if (task.getResult().size() != 0) {
+                    mLastQueriedDocument = task.getResult().getDocuments().get(task.getResult().size() - 1);
+                }
+            } else {
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return status;
+    }
+
+    private ArrayList<Cuestionario> cuestionarios = new ArrayList<>();
+    private ArrayList<ArchivosAniadidos> archivosAgregados = new ArrayList<>();
+
+    private void getCuestionario(String id_nota) {
+        db = FirebaseFirestore.getInstance();
+
+        CollectionReference notesCollectionRef = db
+                .collection(NODO_CURSOS)
+                .document(id_docuento)
+                .collection(NODO_NOTAS)
+                .document(id_nota)
+                .collection(NODO_CUESTIONARIO);
+
+        Query notesQuery = null;
+        if (mLastQueriedDocument != null) {
+            notesQuery = notesCollectionRef
+                    .whereEqualTo("id_nota", id_nota)
+                    .startAfter(mLastQueriedDocument);
+        } else {
+            notesQuery = notesCollectionRef
+                    .whereEqualTo("id_nota", id_nota);
+        }
+
+
+        notesQuery.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Cuestionario _cuestionario = document.toObject(Cuestionario.class);
+                    cuestionarios.add(_cuestionario);
+                }
+
+                Toast.makeText(this, "Cuestionario listo", Toast.LENGTH_SHORT).show();
+                if (task.getResult().size() != 0) {
+                    mLastQueriedDocument = task.getResult().getDocuments().get(task.getResult().size() - 1);
+                }
+            } else {
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void getImagenAniadidas(String id_nota) {
+        db = FirebaseFirestore.getInstance();
+
+        CollectionReference notesCollectionRef = db
+                .collection(NODO_CURSOS)
+                .document(id_docuento)
+                .collection(NODO_NOTAS)
+                .document(id_nota)
+                .collection(NODO_IMAGENES_ANIADIDAS);
+
+        Query notesQuery = null;
+        if (mLastQueriedDocument != null) {
+            notesQuery = notesCollectionRef
+                    .whereEqualTo("id_nota", id_nota)
+                    .startAfter(mLastQueriedDocument);
+        } else {
+            notesQuery = notesCollectionRef
+                    .whereEqualTo("id_nota", id_nota);
+        }
+
+        notesQuery.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    ArchivosAniadidos archivosAniadidos = document.toObject(ArchivosAniadidos.class);
+                    archivosAgregados.add(archivosAniadidos);
+                }
+
+                Toast.makeText(this, "Añadidos listos", Toast.LENGTH_SHORT).show();
+
+                if (task.getResult().size() != 0) {
+                    mLastQueriedDocument = task.getResult().getDocuments().get(task.getResult().size() - 1);
+                }
+
+            } else {
+                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private boolean deleteGrado() {
+        boolean status = false;
+        return status;
     }
 
     private void getDeleteGrado() {
@@ -451,48 +601,6 @@ public class TabActivity extends AppCompatActivity implements IDatos {
 
     private void showTheNewDialog(int type) {
 
-        //Inicializacion de nuestros metodos
-        /*firebaseMethods = new FirebaseMethods(this, NODO_CURSOS, id_docuento, NODO_NOTAS);
-        epicDialog.setContentView(R.layout.popup_alumnos);
-        epicDialog.getWindow().getAttributes().windowAnimations = type;
-        epicDialog.setCancelable(false);
-
-        //Widgets
-        final ImageView closePopupPositiveImg = epicDialog.findViewById(R.id.closePopupPositive);
-        final Button aceptar = epicDialog.findViewById(R.id.btn_acept);
-        final Button mButtonFoto = epicDialog.findViewById(R.id.btn_foto);
-        final EditText mEditTextTitulo = epicDialog.findViewById(R.id.note_title);
-        final EditText mEditTextApellidos = epicDialog.findViewById(R.id.tidt_apellido);
-        final EditText mEditTextEdad = epicDialog.findViewById(R.id.tiet_edad);
-
-        closePopupPositiveImg.setOnClickListener(v -> epicDialog.dismiss());
-
-        mStorageReference = FirebaseStorage.getInstance().getReference("Imagenes");
-
-        mButtonFoto.setOnClickListener(v -> {
-            Intent galeriaIntent = new Intent();
-            galeriaIntent.setAction(Intent.ACTION_GET_CONTENT);
-            galeriaIntent.setType("image/*");
-            startActivityForResult(galeriaIntent, GalleriaPick);
-        });
-
-        aceptar.setOnClickListener(v -> {
-            //Todo: obtenemos los valores de las vistas corresponidnetes
-            String nombre = mEditTextTitulo.getText().toString();
-            String apellidos = mEditTextApellidos.getText().toString();
-            String edad = mEditTextEdad.getText().toString();
-
-            if (checkInputs(nombre, apellidos, edad)) {
-                if (url_imagen == null)
-                    url_imagen = FOTO1;
-
-                crearNuevoAlumno(nombre, apellidos, edad);
-                epicDialog.dismiss();
-            }
-        });
-
-        epicDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        epicDialog.show();*/
     }
 
     private boolean checkInputs(String nombres, String apellidos, String edad) {
@@ -532,74 +640,6 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setAspectRatio(1, 1)
                     .start(this);
-
-
-            /*mImageUri = data.getData();
-
-            File thumb_file_path = new File(mImageUri.getPath());
-            thumb_file_path.getAbsolutePath();
-
-            Bitmap thumb_bitmap = null;
-            try {
-                thumb_bitmap = new Compressor(this)
-                        .setMaxWidth(200)
-                        .setMaxHeight(200)
-                        .setQuality(75)
-                        .compressToBitmap(thumb_file_path);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 2, byteArrayOutputStream);
-            final byte[] thumb_byte = byteArrayOutputStream.toByteArray();
-
-            UploadTask uploadTask = fileReference.putBytes(thumb_byte);
-            uploadTask.addOnCompleteListener(task -> {
-                String url = fileReference.getDownloadUrl().toString();
-                Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
-            });*/
-//---------------------------------------------------------------------------------------------------------------------
-            /*TasksG<Uri> urlTask = fileReference.putFile(mImageUri).continueWithTask(task -> {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
-
-                // Continue with the task to get the download URL
-                return fileReference.getDownloadUrl();
-            }).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Uri downloadUri = task.getResult();
-                    url_imagen = downloadUri.toString();
-                } else {
-                    // Handle failures
-                    // ...
-                }
-            });*/
-
-            /*if (urlTask != null) {
-                Toast.makeText(this, "Subido", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-            }*/
-          /*  fileReference.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    url_imagen = StorageReference.getDownloadUrl().toString();
-                    Toast.makeText(TabActivity.this, "Foto Subida", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                    System.out.println("Upload is paused");
-                }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                    System.out.println("Upload is " + progress + "% done");
-                }
-            });*/
         }
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -644,20 +684,6 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                 } else {
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
                 }
-                /*UploadTask uploadTask = fileReference.putBytes(thumb_byte);
-
-                uploadTask.addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        url_imagen = fileReference.getDownloadUrl().toString();
-                    }
-                    url_imagen = fileReference.getDownloadUrl().toString();
-
-                    /*String url = fileReference.getDownloadUrl().toString();
-                    UploadTask.TaskSnapshot downloadUri = task.getResult();
-                    url_imagen = downloadUri.toString();*/
-                   /* Toast.makeText(this, url_imagen, Toast.LENGTH_SHORT).show();
-                });*/
             }
 
         }

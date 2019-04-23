@@ -134,28 +134,6 @@ public class NotasFragment extends Fragment {
         recyclergenerico.addItemDecoration(new NotasDecoracion(largePadding, smallPadding));
     }
 
-   /* @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.nueva_nota, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-                //getDialog();
-                break;
-            case R.id.setting:
-                //getDialog();
-                break;
-            case R.id.action_delete_curso:
-                //getDialog();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
-
     @Override
     public void onResume() {
         super.onResume();
