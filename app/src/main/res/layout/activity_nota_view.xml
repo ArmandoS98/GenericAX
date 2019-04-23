@@ -208,7 +208,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Fecha de Actualización"
+                                android:text="Fecha de Creacion"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                             <TextView

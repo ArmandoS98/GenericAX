@@ -6,9 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,11 +22,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.santos.firestoremeth.FirebaseMethods;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Adapters.AdaptadorNotas;
+import com.santos.generic.Adapters.AdaptadorNotasMaterial;
 import com.santos.generic.R;
+import com.santos.generic.RecyclerDecoration.NotasDecoracion;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
 
+import static android.widget.GridLayout.VERTICAL;
 import static com.santos.firestoremeth.Nodos.NODO_CURSOS;
 import static com.santos.firestoremeth.Nodos.NODO_NOTAS;
 import static com.santos.firestoremeth.Nodos.PARAMETRO_KEY;
@@ -40,7 +45,8 @@ public class NotasFragment extends Fragment {
     private ArrayList<Notas> alumnos = new ArrayList<>();
     private DocumentSnapshot mLastQueriedDocument;
     private FirebaseMethods firebaseMethods;
-    private AdaptadorNotas mAdaptadorNotas;
+    //private AdaptadorNotas mAdaptadorNotas;
+    private AdaptadorNotasMaterial mAdaptadorNotas;
     private RotateLoading mRotateLoading;
     private FirebaseFirestore db;
     private CollectionReference notesCollectionRef;
@@ -117,12 +123,15 @@ public class NotasFragment extends Fragment {
     //Este metodo inicia el recycler view con sus componentes
     private void initRecyclerView() {
         if (mAdaptadorNotas == null) {
-            mAdaptadorNotas = new AdaptadorNotas(getContext(), alumnos);
+            mAdaptadorNotas = new AdaptadorNotasMaterial(getContext(), alumnos);
         }
 
-        recyclergenerico.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclergenerico.setLayoutManager(new GridLayoutManager(getContext(), 2, RecyclerView.VERTICAL, false));
         //StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, LinearLayout.VERTICAL);
         recyclergenerico.setAdapter(mAdaptadorNotas);
+        int largePadding = getResources().getDimensionPixelSize(R.dimen.shr_product_grid_spacing);
+        int smallPadding = getResources().getDimensionPixelSize(R.dimen.shr_product_grid_spacing_small);
+        recyclergenerico.addItemDecoration(new NotasDecoracion(largePadding, smallPadding));
     }
 
    /* @Override
