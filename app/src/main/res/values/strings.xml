@@ -119,4 +119,6 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="action_settings">settings</string>
+    <string name="mensaje_eleminacion_exitoso">Eliminado Exitosamente</string>
+    <string name="mensaje_eleminacion_fallido">Se ah producido un error al momento de eliminar</string>
 </resources>

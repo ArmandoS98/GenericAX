@@ -184,22 +184,11 @@ public class NotaViewActivity extends AppCompatActivity implements IDatos {
 
                 builder.setPositiveButton("SI", (dialog, which) -> {
                     // Do nothing but close the dialog
-                    db = FirebaseFirestore.getInstance();
-
-                    DocumentReference noteRef = db
-                            .collection(NODO_CURSOS)
-                            .document(curso_id)
-                            .collection(NODO_NOTAS)
-                            .document(finalMNote.getIdNota());
-
-                    noteRef.delete().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(NotaViewActivity.this, "Nota Eliminada", Toast.LENGTH_SHORT).show();
-                            //mNoteRecyclerViewAdapter.removeNote(note);
-                        } else {
-                            Toast.makeText(NotaViewActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    if (deleteNotaData(finalMNote.getIdNota())) {
+                        Toast.makeText(this, getString(R.string.mensaje_eleminacion_exitoso), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, getString(R.string.mensaje_eleminacion_fallido), Toast.LENGTH_SHORT).show();
+                    }
                     dialog.dismiss();
                     NotaViewActivity.this.finish();
                 });
@@ -308,31 +297,6 @@ public class NotaViewActivity extends AppCompatActivity implements IDatos {
             }
         });
 
-
-        /*fileReference.putFile(this.mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                url_imagen = fileReference.getDownloadUrl();
-                url_imagen = taskSnapshot.getDownloadUrl().toString();
-                firebaseMethods.nuevoArchivo(
-                        id_nota,
-                        url_imagen,
-                        nombre,
-                        curso_id);
-            }
-        }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                System.out.println("Upload is paused");
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-
-                System.out.println("Upload is " + progress + "% done");
-            }
-        });*/
     }
 
     //Este metodo inicia el recycler view con sus componentes
@@ -550,6 +514,100 @@ public class NotaViewActivity extends AppCompatActivity implements IDatos {
         Date date = new Date();
         return dateFormat.format(date);
     }
+
+    private boolean deleteNotaData(String id_nota) {
+        boolean status = false;
+        //TODO: ELMINAR (FOTOS | CUESTIONARIOS)
+        db = FirebaseFirestore.getInstance();
+        int i = 0;
+        DocumentReference noteRef = null;
+
+        for (i = 0; i <= 2; i++) {
+            if (i == 0) {
+//                Cuestionario
+                if (cuestionarios.size() > 0) {
+                    for (int j = 0; j < cuestionarios.size(); j++) {
+                        noteRef = db
+                                .collection(NODO_CURSOS)
+                                .document(curso_id)
+                                .collection(NODO_NOTAS)
+                                .document(id_nota)
+                                .collection(NODO_CUESTIONARIO)
+                                .document(cuestionarios.get(j).getId_cuestionario());
+
+                        getDeleteMethod(noteRef, i);
+                    }
+
+                    status = false;
+                }
+            } else if (i == 1) {
+//                Relacionados
+                noteRef = null;
+                if (archivosAgregados.size() > 0) {
+                    for (int j = 0; j < archivosAgregados.size(); j++) {
+                        try {
+                            noteRef = db
+                                    .collection(NODO_CURSOS)
+                                    .document(curso_id)
+                                    .collection(NODO_NOTAS)
+                                    .document(id_nota)
+                                    .collection(NODO_IMAGENES_ANIADIDAS)
+                                    .document(archivosAgregados.get(j).getId_image());
+
+                            getDeleteMethod(noteRef, i, archivosAgregados.get(j).getUrl());
+                        } catch (Exception ex) {
+                            Log.d(TAG, "deleteNotaData: error: " + ex.getMessage());
+                        }
+                    }
+                    status = false;
+                }
+            } else if (i == 2) {
+                noteRef = null;
+                noteRef = db
+                        .collection(NODO_CURSOS)
+                        .document(curso_id)
+                        .collection(NODO_NOTAS)
+                        .document(id_nota);
+
+                getDeleteMethod(noteRef, i, mNote.getUrl_foto());
+                status = true;
+            }
+        }
+
+        return status;
+    }
+
+    private void getDeleteMethod(DocumentReference noteRef, int posicion, String... arg) {
+        if (posicion == 1 || posicion == 2) {
+            mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(arg[0]);
+            mStorageReference.delete().addOnSuccessListener(aVoid -> {
+                // File deleted successfully
+                Log.e("firebasestorage", "onSuccess: deleted file");
+                //Toast.makeText(this, getString(R.string.mensaje_eleminacion_exitoso), Toast.LENGTH_SHORT).show();
+            }).addOnFailureListener(exception -> {
+                // Uh-oh, an error occurred!
+                Log.e("firebasestorage", "onFailure: did not delete file");
+                Toast.makeText(this, getString(R.string.mensaje_eleminacion_fallido), Toast.LENGTH_SHORT).show();
+            });
+            noteRef.delete().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    //Toast.makeText(this, getString(R.string.mensaje_eleminacion_exitoso), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(NotaViewActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        } else {
+            noteRef.delete().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    //Toast.makeText(this, getString(R.string.mensaje_eleminacion_exitoso), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
 
     //INICIA IDATO CAMPOS
     @Override
