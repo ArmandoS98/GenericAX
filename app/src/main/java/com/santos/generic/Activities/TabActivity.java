@@ -1,14 +1,11 @@
 package com.santos.generic.Activities;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -23,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
@@ -35,7 +31,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.santos.firestoremeth.FirebaseMethods;
@@ -63,7 +58,6 @@ import java.util.List;
 import java.util.Locale;
 
 import id.zelory.compressor.Compressor;
-import yuku.ambilwarna.AmbilWarnaDialog;
 
 import static com.santos.firestoremeth.Nodos.ID_CURSO;
 import static com.santos.firestoremeth.Nodos.KEY;
@@ -303,13 +297,13 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                 break;
             case R.id.action_delete_curso:
                 if (getNotasGrado()) {
-                    for (Notas notas : alumnos) {
+                    /*for (Notas notas : alumnos) {
                         if (deleteNotaData(notas.getIdNota(), notas.getUrl_foto())) {
                             Toast.makeText(this, "EXITO", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(this, "No", Toast.LENGTH_SHORT).show();
                         }
-                    }
+                    }*/
                 } else
                     Toast.makeText(this, getString(R.string.mensaje_eleminacion_fallido), Toast.LENGTH_SHORT).show();
                 break;
@@ -357,6 +351,7 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                 for (int i = 0; i < alumnos.size(); i++) {
                     getCuestionario(alumnos.get(i).getIdNota());
                     getImagenAniadidas(alumnos.get(i).getIdNota());
+                    getNotas();
                 }
 
                 status = true;
@@ -371,6 +366,16 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         return status;
     }
 
+    private void getNotas(){
+        db = FirebaseFirestore.getInstance();
+
+        notesCollectionRef = db.collection(NODO_CURSOS)
+                .document(id_docuento)
+                .collection(NODO_NOTAS);
+
+        getDataAndDelete(notesCollectionRef);
+    }
+
     private void getCuestionario(String id_nota) {
         db = FirebaseFirestore.getInstance();
 
@@ -381,7 +386,7 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                 .document(id_nota)
                 .collection(NODO_CUESTIONARIO);
 
-        getData(notesCollectionRef);
+        getDataAndDelete(notesCollectionRef);
     }
 
     private void getImagenAniadidas(String id_nota) {
@@ -394,10 +399,10 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                 .document(id_nota)
                 .collection(NODO_IMAGENES_ANIADIDAS);
 
-        getData(notesCollectionRef);
+        getDataAndDelete(notesCollectionRef);
     }
 
-    private void getData(CollectionReference notesCollectionRef) {
+    private void getDataAndDelete(CollectionReference notesCollectionRef) {
         Query notesQuery = null;
         if (mLastQueriedDocument != null) {
             notesQuery = notesCollectionRef
@@ -412,9 +417,6 @@ public class TabActivity extends AppCompatActivity implements IDatos {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     notesCollectionRef.document(document.getId()).delete();
-                    Toast.makeText(this, "Eliminado", Toast.LENGTH_SHORT).show();
-                        /*Cuestionario _cuestionario = document.toObject(Cuestionario.class);
-                        cuestionarios.add(_cuestionario);*/
                 }
                 if (task.getResult().size() != 0) {
                     mLastQueriedDocument = task.getResult().getDocuments().get(task.getResult().size() - 1);

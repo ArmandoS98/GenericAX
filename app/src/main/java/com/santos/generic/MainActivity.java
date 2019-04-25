@@ -174,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements
                 break;
             case R.id.mo_perfil:
                 startActivity(new Intent(this, PerfilActivity.class));
+                finish();
                 mNavigationIconClickListener.onClick(v);
                 break;
         }
