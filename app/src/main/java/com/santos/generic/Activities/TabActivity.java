@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,10 +18,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
@@ -32,6 +35,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.santos.firestoremeth.FirebaseMethods;
 import com.santos.firestoremeth.Models.ArchivosAniadidos;
@@ -60,6 +65,7 @@ import java.util.Locale;
 import id.zelory.compressor.Compressor;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
+import static com.santos.firestoremeth.Nodos.ID_CURSO;
 import static com.santos.firestoremeth.Nodos.KEY;
 import static com.santos.firestoremeth.Nodos.NODO_CUESTIONARIO;
 import static com.santos.firestoremeth.Nodos.NODO_CURSOS;
@@ -93,9 +99,13 @@ public class TabActivity extends AppCompatActivity implements IDatos {
     private Uri mImageUri;
     private Bitmap thumb_bitmap = null;
     private boolean pos = false;
+    private ArrayList<Cuestionario> cuestionarios = new ArrayList<>();
+    private ArrayList<ArchivosAniadidos> archivosAgregados = new ArrayList<>();
+    private CollectionReference notesCollectionRef;
+    private ArrayList<Notas> alumnos = new ArrayList<>();
+    private DocumentSnapshot mLastQueriedDocument;
 
     private ViewPagerAdapter adapter;
-
     private TareaRepository mTareaRepository;
 
     @Override
@@ -121,7 +131,7 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         if (cursos != null) {
 
             id_docuento = cursos.getId_curso();
-            getNotasGrado();
+            //getNotasGrado();
 
             //Donde se carggaran las tabs
             viewPager = findViewById(R.id.htab_viewpager);
@@ -273,10 +283,6 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private CollectionReference notesCollectionRef;
-    private ArrayList<Notas> alumnos = new ArrayList<>();
-    private DocumentSnapshot mLastQueriedDocument;
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -298,11 +304,13 @@ public class TabActivity extends AppCompatActivity implements IDatos {
             case R.id.action_delete_curso:
                 if (getNotasGrado()) {
                     for (Notas notas : alumnos) {
-                        Toast.makeText(this, notas.getTituloNota(), Toast.LENGTH_SHORT).show();
+                        if (deleteNotaData(notas.getIdNota(), notas.getUrl_foto())) {
+                            Toast.makeText(this, "EXITO", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "No", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-//                    deleteGrado();
-                else
+                } else
                     Toast.makeText(this, getString(R.string.mensaje_eleminacion_fallido), Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -311,6 +319,11 @@ public class TabActivity extends AppCompatActivity implements IDatos {
     }
 
     boolean status = false;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
     private boolean getNotasGrado() {
 
@@ -358,9 +371,6 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         return status;
     }
 
-    private ArrayList<Cuestionario> cuestionarios = new ArrayList<>();
-    private ArrayList<ArchivosAniadidos> archivosAgregados = new ArrayList<>();
-
     private void getCuestionario(String id_nota) {
         db = FirebaseFirestore.getInstance();
 
@@ -371,33 +381,7 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                 .document(id_nota)
                 .collection(NODO_CUESTIONARIO);
 
-        Query notesQuery = null;
-        if (mLastQueriedDocument != null) {
-            notesQuery = notesCollectionRef
-                    .whereEqualTo("id_nota", id_nota)
-                    .startAfter(mLastQueriedDocument);
-        } else {
-            notesQuery = notesCollectionRef
-                    .whereEqualTo("id_nota", id_nota);
-        }
-
-
-        notesQuery.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Cuestionario _cuestionario = document.toObject(Cuestionario.class);
-                    cuestionarios.add(_cuestionario);
-                }
-
-                Toast.makeText(this, "Cuestionario listo", Toast.LENGTH_SHORT).show();
-                if (task.getResult().size() != 0) {
-                    mLastQueriedDocument = task.getResult().getDocuments().get(task.getResult().size() - 1);
-                }
-            } else {
-                Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        getData(notesCollectionRef);
     }
 
     private void getImagenAniadidas(String id_nota) {
@@ -410,29 +394,31 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                 .document(id_nota)
                 .collection(NODO_IMAGENES_ANIADIDAS);
 
+        getData(notesCollectionRef);
+    }
+
+    private void getData(CollectionReference notesCollectionRef) {
         Query notesQuery = null;
         if (mLastQueriedDocument != null) {
             notesQuery = notesCollectionRef
-                    .whereEqualTo("id_nota", id_nota)
+                    .whereEqualTo(ID_CURSO, id_docuento)
                     .startAfter(mLastQueriedDocument);
         } else {
             notesQuery = notesCollectionRef
-                    .whereEqualTo("id_nota", id_nota);
+                    .whereEqualTo(ID_CURSO, id_docuento);
         }
 
         notesQuery.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    ArchivosAniadidos archivosAniadidos = document.toObject(ArchivosAniadidos.class);
-                    archivosAgregados.add(archivosAniadidos);
+                    notesCollectionRef.document(document.getId()).delete();
+                    Toast.makeText(this, "Eliminado", Toast.LENGTH_SHORT).show();
+                        /*Cuestionario _cuestionario = document.toObject(Cuestionario.class);
+                        cuestionarios.add(_cuestionario);*/
                 }
-
-                Toast.makeText(this, "Añadidos listos", Toast.LENGTH_SHORT).show();
-
                 if (task.getResult().size() != 0) {
                     mLastQueriedDocument = task.getResult().getDocuments().get(task.getResult().size() - 1);
                 }
-
             } else {
                 Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             }
@@ -440,191 +426,103 @@ public class TabActivity extends AppCompatActivity implements IDatos {
 
     }
 
-    private boolean deleteGrado() {
+    private boolean deleteNotaData(String id_nota, String url) {
         boolean status = false;
+        //TODO: ELMINAR (FOTOS | CUESTIONARIOS)
+        db = FirebaseFirestore.getInstance();
+        int i = 0;
+        DocumentReference noteRef = null;
+
+        for (i = 0; i <= 2; i++) {
+            if (i == 0) {
+//                Cuestionario
+                if (cuestionarios.size() > 0) {
+                    for (int j = 0; j < cuestionarios.size(); j++) {
+                        noteRef = db
+                                .collection(NODO_CURSOS)
+                                .document(id_docuento)
+                                .collection(NODO_NOTAS)
+                                .document(id_nota)
+                                .collection(NODO_CUESTIONARIO)
+                                .document(cuestionarios.get(j).getId_cuestionario());
+
+                        getDeleteMethod(noteRef, i);
+                    }
+
+                    status = false;
+                }
+            } else if (i == 1) {
+//                Relacionados
+                noteRef = null;
+                if (archivosAgregados.size() > 0) {
+                    for (int j = 0; j < archivosAgregados.size(); j++) {
+                        try {
+                            noteRef = db
+                                    .collection(NODO_CURSOS)
+                                    .document(id_docuento)
+                                    .collection(NODO_NOTAS)
+                                    .document(id_nota)
+                                    .collection(NODO_IMAGENES_ANIADIDAS)
+                                    .document(archivosAgregados.get(j).getId_image());
+
+                            getDeleteMethod(noteRef, i, archivosAgregados.get(j).getUrl());
+                        } catch (Exception ex) {
+                            Log.d(TAG, "deleteNotaData: error: " + ex.getMessage());
+                        }
+                    }
+                    status = false;
+                }
+            } else if (i == 2) {
+                noteRef = null;
+                try {
+                    for (int j = 0; j < alumnos.size(); j++) {
+                        noteRef = db
+                                .collection(NODO_CURSOS)
+                                .document(id_docuento)
+                                .collection(NODO_NOTAS)
+                                .document(id_nota);
+
+                        getDeleteMethod(noteRef, i, url);
+                    }
+
+                } catch (Exception es) {
+                    Log.d(TAG, "deleteNotaData: ERROR " + es.getMessage());
+                }
+                status = true;
+            }
+        }
+
         return status;
     }
 
-    private void getDeleteGrado() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(TabActivity.this);
-
-        builder.setTitle("Confirmar");
-        builder.setMessage("Esta seguro de eliminar este curso?");
-
-        builder.setPositiveButton("SI", (dialog, which) -> {
-            // Do nothing but close the dialog
-            db = FirebaseFirestore.getInstance();
-
-            //deleteCuestionario();
-
-            DocumentReference noteRef = db
-                    .collection(NODO_CURSOS)
-                    .document(cursos.getId_curso());
-
+    private void getDeleteMethod(DocumentReference noteRef, int posicion, String... arg) {
+        if (posicion == 1 || posicion == 2) {
+            mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(arg[0]);
+            mStorageReference.delete().addOnSuccessListener(aVoid -> {
+                // File deleted successfully
+                Log.e("firebasestorage", "onSuccess: deleted file");
+                //Toast.makeText(this, getString(R.string.mensaje_eleminacion_exitoso), Toast.LENGTH_SHORT).show();
+            }).addOnFailureListener(exception -> {
+                // Uh-oh, an error occurred!
+                Log.e("firebasestorage", "onFailure: did not delete file");
+                Toast.makeText(this, getString(R.string.mensaje_eleminacion_fallido), Toast.LENGTH_SHORT).show();
+            });
             noteRef.delete().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Toast.makeText(TabActivity.this, "Curso Eliminado", Toast.LENGTH_SHORT).show();
-                    //mNoteRecyclerViewAdapter.removeNote(note);
                 } else {
-                    Toast.makeText(TabActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
                 }
             });
-            dialog.dismiss();
-            TabActivity.this.finish();
-        });
 
-        builder.setNegativeButton("NO", (dialog, which) -> {
-
-            // Do nothing
-            dialog.dismiss();
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    private void deleteNotas() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(TabActivity.this);
-
-        builder.setTitle("Confirmar");
-        builder.setMessage("Esta seguro de eliminar este curso?");
-
-        builder.setPositiveButton("SI", (dialog, which) -> {
-            // Do nothing but close the dialog
-            db = FirebaseFirestore.getInstance();
-
-            DocumentReference noteRef = db
-                    .collection(NODO_CURSOS)
-                    .document(cursos.getId_curso());
-
+        } else {
             noteRef.delete().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Toast.makeText(TabActivity.this, "Curso Eliminado", Toast.LENGTH_SHORT).show();
-                    //mNoteRecyclerViewAdapter.removeNote(note);
+                    //Toast.makeText(this, getString(R.string.mensaje_eleminacion_exitoso), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(TabActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
                 }
             });
-            dialog.dismiss();
-            TabActivity.this.finish();
-        });
-
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                // Do nothing
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    private void deleteArchivos() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(TabActivity.this);
-
-        builder.setTitle("Confirmar");
-        builder.setMessage("Esta seguro de eliminar este curso?");
-
-        builder.setPositiveButton("SI", (dialog, which) -> {
-            // Do nothing but close the dialog
-            db = FirebaseFirestore.getInstance();
-
-            DocumentReference noteRef = db
-                    .collection(NODO_CURSOS)
-                    .document(cursos.getId_curso());
-
-            noteRef.delete().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    Toast.makeText(TabActivity.this, "Curso Eliminado", Toast.LENGTH_SHORT).show();
-                    //mNoteRecyclerViewAdapter.removeNote(note);
-                } else {
-                    Toast.makeText(TabActivity.this, "Error", Toast.LENGTH_SHORT).show();
-                }
-            });
-            dialog.dismiss();
-            TabActivity.this.finish();
-        });
-
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                // Do nothing
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    private void deleteCuestionario() {
-        db = FirebaseFirestore.getInstance();
-
-        DocumentReference noteRef = db
-                .collection(NODO_CURSOS)
-                .document(cursos.getId_curso())
-                .collection(NODO_NOTAS)
-                .document();
-
-        noteRef.delete().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(TabActivity.this, "Curso Eliminado", Toast.LENGTH_SHORT).show();
-                //mNoteRecyclerViewAdapter.removeNote(note);
-            } else {
-                Toast.makeText(TabActivity.this, "Error", Toast.LENGTH_SHORT).show();
-            }
-        });
-        TabActivity.this.finish();
-    }
-
-    private void openDialog(boolean supportsAlpha) {
-        AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, currentColor, supportsAlpha, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onOk(AmbilWarnaDialog dialog, int color) {
-                currentColor = color;
-                //appBar.setBackgroundColor(color);
-            }
-
-            @Override
-            public void onCancel(AmbilWarnaDialog dialog) {
-                Toast.makeText(getApplicationContext(), "Action canceled!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        dialog.show();
-    }
-
-    private void showTheNewDialog(int type) {
-
-    }
-
-    private boolean checkInputs(String nombres, String apellidos, String edad) {
-        if (nombres.equals("") || apellidos.equals("") || edad.equals("")) {
-            Toast.makeText(this, "Todos los compos son obligatorios", Toast.LENGTH_SHORT).show();
-            return false;
         }
-
-        return true;
-    }
-
-    private void crearNuevoAlumno(String nombre, String apellidos, String edad) {
-        //firebaseMethods.registrarNuevoEmail(correo,"123456789");
-
-
-        firebaseMethods.nuevaNota(
-                nombre,
-                apellidos,
-                edad,
-                firebaseUser.getDisplayName(),
-                firebaseUser.getPhotoUrl().toString(),
-                firebaseUser.getEmail(),
-                url_imagen,
-                firebaseUser.getUid());
     }
 
     @Override
@@ -693,6 +591,37 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM yyyy  HH:mm:ss", Locale.getDefault());
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+
+    private boolean otherform(String... args) {
+        db = FirebaseFirestore.getInstance();
+        notesCollectionRef = db.collection(NODO_CUESTIONARIO);
+        Query notesQuery = null;
+        if (mLastQueriedDocument != null) {
+            notesQuery = notesCollectionRef
+                    .whereEqualTo("id_nota", args[0])
+                    .startAfter(mLastQueriedDocument);
+        } else {
+            notesQuery = notesCollectionRef
+                    .whereEqualTo("id_nota", args[0]);
+        }
+
+        notesQuery.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Toast.makeText(this, document.getId(), Toast.LENGTH_SHORT).show();
+                    notesCollectionRef.document(document.getId()).delete();
+
+                }
+                status = true;
+            } else {
+                Log.d(TAG, "Error getting documents: ", task.getException());
+                status = false;
+            }
+        });
+
+        return status;
     }
 
 }

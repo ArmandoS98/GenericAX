@@ -221,6 +221,7 @@ public class FirebaseMethods {
         archivosAniadidos.setId_nota(datos[0]);
         archivosAniadidos.setUrl(datos[1]);
         archivosAniadidos.setDescripcion(datos[2]);
+        archivosAniadidos.setId_curso(datos[3]);
 
 
         newNoteRef.set(archivosAniadidos).addOnCompleteListener(task -> {

@@ -11,16 +11,19 @@ import java.util.Date;
 @IgnoreExtraProperties
 public class ArchivosAniadidos implements Parcelable {
     private String url;
+    private String id_curso;
     private String id_image;
     private String id_nota;
     private String descripcion;
-    private @ServerTimestamp Date timestamp;
+    private @ServerTimestamp
+    Date timestamp;
 
     public ArchivosAniadidos() {
     }
 
-    public ArchivosAniadidos(String url, String id_image, String id_nota, String descripcion, Date timestamp) {
+    public ArchivosAniadidos(String url, String id_curso, String id_image, String id_nota, String descripcion, Date timestamp) {
         this.url = url;
+        this.id_curso = id_curso;
         this.id_image = id_image;
         this.id_nota = id_nota;
         this.descripcion = descripcion;
@@ -29,6 +32,7 @@ public class ArchivosAniadidos implements Parcelable {
 
     protected ArchivosAniadidos(Parcel in) {
         url = in.readString();
+        id_curso = in.readString();
         id_image = in.readString();
         id_nota = in.readString();
         descripcion = in.readString();
@@ -52,6 +56,14 @@ public class ArchivosAniadidos implements Parcelable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getId_curso() {
+        return id_curso;
+    }
+
+    public void setId_curso(String id_curso) {
+        this.id_curso = id_curso;
     }
 
     public String getId_image() {
@@ -87,17 +99,6 @@ public class ArchivosAniadidos implements Parcelable {
     }
 
     @Override
-    public String toString() {
-        return "ArchivosAniadidos{" +
-                "url='" + url + '\'' +
-                ", id_image='" + id_image + '\'' +
-                ", id_nota='" + id_nota + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", timestamp=" + timestamp +
-                '}';
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }
@@ -105,6 +106,7 @@ public class ArchivosAniadidos implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(url);
+        dest.writeString(id_curso);
         dest.writeString(id_image);
         dest.writeString(id_nota);
         dest.writeString(descripcion);

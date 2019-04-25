@@ -30,4 +30,7 @@ public class Nodos {
 
     //VAR PARA NUESTROS INTENTES
     public static final String KEY = "dato";
+
+    //Eliminacion
+    public static final String ID_CURSO = "id_curso";
 }
