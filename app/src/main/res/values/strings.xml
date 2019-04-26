@@ -121,4 +121,7 @@
     <string name="action_settings">settings</string>
     <string name="mensaje_eleminacion_exitoso">Eliminado Exitosamente</string>
     <string name="mensaje_eleminacion_fallido">Se ah producido un error al momento de eliminar</string>
+    <string name="titulo_grupos">Grupos</string>
+    <string name="titulo_tareas">Tareas</string>
+    <string name="titulo_notas">Notas</string>
 </resources>

@@ -39,6 +39,7 @@ import com.santos.firestoremeth.Models.Cuestionario;
 import com.santos.firestoremeth.Models.Cursos;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Dialogs.NuevaTaskFullScreen;
+import com.santos.generic.Fragmentos.GroupFragment;
 import com.santos.generic.Fragmentos.NotasFragment;
 import com.santos.generic.Fragmentos.TareasFragment;
 import com.santos.generic.Interfaz.IDatos;
@@ -92,7 +93,7 @@ public class TabActivity extends AppCompatActivity implements IDatos {
     private Cursos cursos = null;
     private Uri mImageUri;
     private Bitmap thumb_bitmap = null;
-    private boolean pos = false;
+    private int pos = 0;
     private ArrayList<Cuestionario> cuestionarios = new ArrayList<>();
     private ArrayList<ArchivosAniadidos> archivosAgregados = new ArrayList<>();
     private CollectionReference notesCollectionRef;
@@ -140,11 +141,8 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                 public void onTabSelected(TabLayout.Tab tab) {
 
                     viewPager.setCurrentItem(tab.getPosition());
-                    if (tab.getPosition() != 0) {
-                        pos = true;
-                    } else {
-                        pos = false;
-                    }
+                    pos = tab.getPosition();
+
                 }
 
                 @Override
@@ -171,8 +169,9 @@ public class TabActivity extends AppCompatActivity implements IDatos {
 
         tabTareasFragment.setArguments(bundle);*/
         //adapter.addFrag(tabTareasFragment, "Notas");
-        adapter.addFrag(new NotasFragment(), "Notas");
-        adapter.addFrag(new TareasFragment(), "Tareas");
+        adapter.addFrag(new NotasFragment(), getString(R.string.titulo_notas));
+        adapter.addFrag(new TareasFragment(), getString(R.string.titulo_tareas));
+        adapter.addFrag(new GroupFragment(), getString(R.string.titulo_grupos));
         viewPager.setAdapter(adapter);
 
 
@@ -285,14 +284,16 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                 //getDialog();
                 break;
             case R.id.setting:
-                if (pos) {
+                if (pos == 1) {
                     NuevaTaskFullScreen mNuevaTaskFullScreen = new NuevaTaskFullScreen();
                     mNuevaTaskFullScreen.setCancelable(false);
                     mNuevaTaskFullScreen.show(getSupportFragmentManager(), "Nueva Tarea");
-                } else {
+                } else if (pos == 0){
                     Intent intent = new Intent(TabActivity.this, NotasActivity.class);
                     intent.putExtra(KEY_NOTAS, id_docuento);
                     startActivity(intent);
+                }else if (pos == 2){
+                    Toast.makeText(this, "Tarea Grupal", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.action_delete_curso:
@@ -366,7 +367,7 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         return status;
     }
 
-    private void getNotas(){
+    private void getNotas() {
         db = FirebaseFirestore.getInstance();
 
         notesCollectionRef = db.collection(NODO_CURSOS)

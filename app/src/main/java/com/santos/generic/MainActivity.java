@@ -7,16 +7,24 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.santos.firestoremeth.Models.Cursos;
@@ -34,8 +42,8 @@ import com.santos.generic.Fragmentos.TareaGFragment;
 import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.NavigationDown.NavigationIconClickListener;
 import com.santos.generic.Utils.Connectivity;
-import com.santos.generic.Utils.TasksG;
 import com.santos.generic.Utils.SharedPrefences.PreferenceHelperDemo;
+import com.santos.generic.Utils.TasksG;
 
 import static com.santos.generic.Utils.palReb.KEY_NOTAS;
 
@@ -113,7 +121,6 @@ public class MainActivity extends AppCompatActivity implements
         //fragmentoGenerico = new FormulasFragment();
         toolbar.setTitle("Dashboard");
         getSupportFragmentManager().beginTransaction().add(R.id.contenedor, fragmentoGenerico).commit();
-
         // Set cut corner background for API 23+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             findViewById(R.id.product_grid).setBackground(this.getDrawable(R.drawable.shr_product_grid_background_shape));
@@ -149,19 +156,19 @@ public class MainActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mo_dashboard:
-                navigationDownDrawer(v, "Dashboard", new DashboardFragment(), true);
+                navigationDownDrawer(v, "Dashboard", new DashboardFragment());
                 break;
             case R.id.mo_agenda:
-                navigationDownDrawer(v, "Agenda", new AgendaFragment(), true);
+                navigationDownDrawer(v, "Agenda", new AgendaFragment());
                 break;
             case R.id.mo_cursos:
-                navigationDownDrawer(v, "Cursos", new CursosFragment(), true);
+                navigationDownDrawer(v, "Cursos", new CursosFragment());
                 break;
             case R.id.mo_horarios:
-                navigationDownDrawer(v, "Horarios", new DashboardFragment(), true);
+                navigationDownDrawer(v, "Horarios", new DashboardFragment());
                 break;
             case R.id.mo_tareas:
-                navigationDownDrawer(v, "Tareas", new TareaGFragment(), true);
+                navigationDownDrawer(v, "Tareas", new TareaGFragment());
                 break;
             case R.id.mo_recordatorios:
                 startActivity(new Intent(this, PortalWebActivity.class));
@@ -180,9 +187,8 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void navigationDownDrawer(View v, String titulo, Fragment fragment, boolean regreso) {
+    private void navigationDownDrawer(View v, String titulo, Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-
         toolbar.setTitle(titulo);
 
         fragmentoGenerico = fragment;
@@ -269,28 +275,4 @@ public class MainActivity extends AppCompatActivity implements
         sp.edit().putInt("FIRSTTIMERUN", currentVersionCode).apply();
         return result;
     }
-
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(getApplicationContext(), NuevoCursooActivity.class));
-
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 }
