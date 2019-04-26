@@ -10,6 +10,8 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -79,7 +81,6 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
     //Widgets
     private EditText mEditTextTitulo;
     private EditText mEditTextDescripcion;
-    private Button mButtonSubir;
     private ImageButton mImageButtonImagen;
     private Dialog mChoosingDialog;
     private ImageView ivbChooseClose;
@@ -113,7 +114,6 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
         mImageButtonImagen = findViewById(R.id.select_post_image);
         mEditTextTitulo = findViewById(R.id.click_post_tittle);
         mEditTextDescripcion = findViewById(R.id.click_post_description);
-        mButtonSubir = findViewById(R.id.update_post_button);
         mChipGroup = findViewById(R.id.group_chips);
 
         Chip chip = new Chip(this);
@@ -141,7 +141,6 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
         llGallery.setOnClickListener(this);
         ivbChooseClose.setOnClickListener(this);
         mImageButtonImagen.setOnClickListener(this);
-        mButtonSubir.setOnClickListener(this);
     }
 
     @Override
@@ -149,17 +148,6 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.select_post_image:
                 mChoosingDialog.show();
-                break;
-            case R.id.update_post_button:
-                String titulo = mEditTextTitulo.getText().toString();
-                String descripcion = mEditTextDescripcion.getText().toString();
-                String otra = "hola";
-
-                if (checkInputs(titulo, descripcion, otra)) {
-
-                    crearNuevoAlumno(titulo, descripcion, otra);
-
-                }
                 break;
             case R.id.ivbChooseClose:
                 mChoosingDialog.dismiss();
@@ -441,5 +429,32 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
         });
 
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.nueva_tarea, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.setting:
+                String titulo = mEditTextTitulo.getText().toString();
+                String descripcion = mEditTextDescripcion.getText().toString();
+                String otra = "hola";
+
+                if (checkInputs(titulo, descripcion, otra)) {
+
+                    crearNuevoAlumno(titulo, descripcion, otra);
+
+                }
+                break;
+
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
