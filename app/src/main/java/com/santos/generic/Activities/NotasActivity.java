@@ -32,6 +32,8 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
@@ -82,6 +84,7 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
     private Dialog mChoosingDialog;
     private ImageView ivbChooseClose;
     private LinearLayout llCamera, llGallery;
+    private ChipGroup mChipGroup;
 
 
     @Override
@@ -111,7 +114,16 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
         mEditTextTitulo = findViewById(R.id.click_post_tittle);
         mEditTextDescripcion = findViewById(R.id.click_post_description);
         mButtonSubir = findViewById(R.id.update_post_button);
+        mChipGroup = findViewById(R.id.group_chips);
 
+        Chip chip = new Chip(this);
+        chip.setText("Hola");
+        chip.setChipIcon(ContextCompat.getDrawable(this, R.drawable.google_icon));
+        chip.setCloseIconVisible(true);
+        chip.setCheckable(false);
+        chip.setClickable(false);
+
+        mChipGroup.addView(chip);
 
         mChoosingDialog = new Dialog(NotasActivity.this);
         mChoosingDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
