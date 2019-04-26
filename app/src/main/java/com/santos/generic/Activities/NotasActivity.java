@@ -87,7 +87,6 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
     private LinearLayout llCamera, llGallery;
     private ChipGroup mChipGroup;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,9 +132,9 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
         mChoosingDialog.setCancelable(true);
         mChoosingDialog.setContentView(R.layout.dialog_choose_cameragallery);
 
-        ivbChooseClose = (ImageView) mChoosingDialog.findViewById(R.id.ivbChooseClose);
-        llCamera = (LinearLayout) mChoosingDialog.findViewById(R.id.llCamera);
-        llGallery = (LinearLayout) mChoosingDialog.findViewById(R.id.llGallery);
+        ivbChooseClose = mChoosingDialog.findViewById(R.id.ivbChooseClose);
+        llCamera = mChoosingDialog.findViewById(R.id.llCamera);
+        llGallery = mChoosingDialog.findViewById(R.id.llGallery);
 
         llCamera.setOnClickListener(this);
         llGallery.setOnClickListener(this);
@@ -430,7 +429,6 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
 
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
