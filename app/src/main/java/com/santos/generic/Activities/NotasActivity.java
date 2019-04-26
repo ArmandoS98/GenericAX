@@ -116,14 +116,14 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
         mEditTextDescripcion = findViewById(R.id.click_post_description);
         mChipGroup = findViewById(R.id.group_chips);
 
-        Chip chip = new Chip(this);
+      /*  Chip chip = new Chip(this);
         chip.setText("Hola");
         chip.setChipIcon(ContextCompat.getDrawable(this, R.drawable.google_icon));
         chip.setCloseIconVisible(true);
         chip.setCheckable(false);
         chip.setClickable(false);
 
-        mChipGroup.addView(chip);
+        mChipGroup.addView(chip);*/
 
         mChoosingDialog = new Dialog(NotasActivity.this);
         mChoosingDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
