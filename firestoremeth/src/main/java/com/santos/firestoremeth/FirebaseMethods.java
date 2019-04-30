@@ -20,12 +20,14 @@ import com.santos.firestoremeth.Models.ArchivosAniadidos;
 import com.santos.firestoremeth.Models.Cuestionario;
 import com.santos.firestoremeth.Models.Cursos;
 import com.santos.firestoremeth.Models.Notas;
+import com.santos.firestoremeth.Models.TareasG;
 import com.santos.firestoremeth.Models.Usuario;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static com.santos.firestoremeth.Nodos.IDENTIFICADOR_USUARIO;
 import static com.santos.firestoremeth.Nodos.NODO_CUESTIONARIO;
@@ -86,13 +88,14 @@ public class FirebaseMethods {
         db = FirebaseFirestore.getInstance();
         //DocumentoReference
         //newNoteRef = db.collection(nodo).document();
-        mCollectionReference = db.collection(nodo);
+        //mCollectionReference = db.collection(nodo);
+        newNoteRef = db.collection(nodo).document();
+
         //El contexto de donde se esta llamando
         mContext = context;
 
         if (mAuth.getCurrentUser() != null) {
             userID = mAuth.getCurrentUser().getUid();
-            Toast.makeText(context, userID, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -256,6 +259,26 @@ public class FirebaseMethods {
                 Toast.makeText(mContext, "Informacion Actualizada", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(mContext, "Error!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void crearTareaGrupal(List<String> datos, String... args) {
+        TareasG tareasG = new TareasG();
+        tareasG.setId_tarea(newNoteRef.getId());
+        tareasG.setId_admin(userID);
+        tareasG.setNombre_curso(args[0]);
+        tareasG.setTitulo(args[1]);
+        tareasG.setDescripcion(args[2]);
+        tareasG.setUsers(datos);
+
+        newNoteRef.set(tareasG).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful())
+                    Toast.makeText(mContext, "exitosamente", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(mContext, "Problemas", Toast.LENGTH_SHORT).show();
             }
         });
     }

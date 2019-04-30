@@ -5,6 +5,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+
+
     <ImageButton
         android:id="@+id/select_post_image"
         android:layout_width="0dp"

@@ -38,6 +38,7 @@ import com.santos.generic.Activities.TareaViewActivity;
 import com.santos.generic.Fragmentos.AgendaFragment;
 import com.santos.generic.Fragmentos.CursosFragment;
 import com.santos.generic.Fragmentos.DashboardFragment;
+import com.santos.generic.Fragmentos.GroupFragment;
 import com.santos.generic.Fragmentos.TareaGFragment;
 import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.NavigationDown.NavigationIconClickListener;
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements
                 navigationDownDrawer(v, "Cursos", new CursosFragment());
                 break;
             case R.id.mo_horarios:
-                navigationDownDrawer(v, "Horarios", new DashboardFragment());
+                navigationDownDrawer(v, "Grupos", new GroupFragment());
                 break;
             case R.id.mo_tareas:
                 navigationDownDrawer(v, "Tareas", new TareaGFragment());
