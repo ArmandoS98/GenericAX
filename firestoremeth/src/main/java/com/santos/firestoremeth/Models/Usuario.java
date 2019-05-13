@@ -20,14 +20,14 @@ public class Usuario implements Parcelable {
     public Usuario() {
     }
 
-    public Usuario(String id_usuario, String nombre, String telefono, String url_perfil, String correo, Date timestamp) {
+    /*public Usuario(String id_usuario, String nombre, String telefono, String url_perfil, String correo, Date timestamp) {
         this.id_usuario = id_usuario;
         this.nombre = nombre;
         this.telefono = telefono;
         this.url_perfil = url_perfil;
         this.correo = correo;
         this.timestamp = timestamp;
-    }
+    }*/
 
     protected Usuario(Parcel in) {
         id_usuario = in.readString();
@@ -95,18 +95,6 @@ public class Usuario implements Parcelable {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
-    }
-
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id_usuario='" + id_usuario + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", telefono='" + telefono + '\'' +
-                ", url_perfil='" + url_perfil + '\'' +
-                ", correo='" + correo + '\'' +
-                ", timestamp=" + timestamp +
-                '}';
     }
 
     @Override

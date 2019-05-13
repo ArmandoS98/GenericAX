@@ -6,12 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.CollectionReference;
@@ -20,8 +18,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.santos.firestoremeth.FirebaseMethods;
+import com.santos.firestoremeth.Logica.LNota;
 import com.santos.firestoremeth.Models.Notas;
-import com.santos.generic.Adapters.AdaptadorNotas;
+import com.santos.firestoremeth.Persistencia.UsuarioDAO;
 import com.santos.generic.Adapters.AdaptadorNotasMaterial;
 import com.santos.generic.R;
 import com.santos.generic.RecyclerDecoration.NotasDecoracion;
@@ -29,11 +28,8 @@ import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
 
-import static android.widget.GridLayout.VERTICAL;
 import static com.santos.firestoremeth.Nodos.NODO_CURSOS;
 import static com.santos.firestoremeth.Nodos.NODO_NOTAS;
-import static com.santos.firestoremeth.Nodos.PARAMETRO_KEY;
-import static com.santos.firestoremeth.Nodos.PARAMETRO_VALOR;
 import static com.santos.generic.Activities.TabActivity.id_docuento;
 
 public class NotasFragment extends Fragment {
@@ -42,7 +38,7 @@ public class NotasFragment extends Fragment {
     private RecyclerView recyclergenerico;
 
     //Variables
-    private ArrayList<Notas> alumnos = new ArrayList<>();
+    private ArrayList<LNota> alumnos = new ArrayList<>();
     private DocumentSnapshot mLastQueriedDocument;
     private FirebaseMethods firebaseMethods;
     //private AdaptadorNotas mAdaptadorNotas;
@@ -86,20 +82,18 @@ public class NotasFragment extends Fragment {
         Query notesQuery = null;
         if (mLastQueriedDocument != null) {
             notesQuery = notesCollectionRef
-                    .whereEqualTo("key", "1")
                     .startAfter(mLastQueriedDocument);
         } else {
-            notesQuery = notesCollectionRef
-                    .whereEqualTo("key", "1");
+            notesQuery = notesCollectionRef;
         }
-
 
         notesQuery.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
 
                 alumnos.clear();
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    Notas alumno = document.toObject(Notas.class);
+                    Notas notas = document.toObject(Notas.class);
+                    LNota alumno = new LNota(document.getId(), notas);
                     alumnos.add(alumno);
                 }
 
@@ -140,7 +134,6 @@ public class NotasFragment extends Fragment {
         db.collection(NODO_CURSOS)
                 .document(id_docuento)
                 .collection(NODO_NOTAS)
-                .whereEqualTo(PARAMETRO_KEY, PARAMETRO_VALOR)
                 .addSnapshotListener((value, e) -> {
                     if (e != null) {
                         Log.d(TAG, "onEvent: llego");
@@ -149,14 +142,16 @@ public class NotasFragment extends Fragment {
 
                     if (alumnos.size() == 0) {
                         alumnos.clear();
-                        for (QueryDocumentSnapshot doc : value) {
-                            Notas grado = doc.toObject(Notas.class);
+                        for (QueryDocumentSnapshot document : value) {
+                            Notas notas = document.toObject(Notas.class);
+                            LNota grado = new LNota(document.getId(), notas);
                             alumnos.add(grado);
                         }
                     } else {
                         alumnos.clear();
-                        for (QueryDocumentSnapshot doc : value) {
-                            Notas grado = doc.toObject(Notas.class);
+                        for (QueryDocumentSnapshot document : value) {
+                            Notas notas = document.toObject(Notas.class);
+                            LNota grado = new LNota(document.getId(), notas);
                             alumnos.add(grado);
                         }
                     }

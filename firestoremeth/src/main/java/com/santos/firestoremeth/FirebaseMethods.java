@@ -22,6 +22,7 @@ import com.santos.firestoremeth.Models.Cursos;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.firestoremeth.Models.TareasG;
 import com.santos.firestoremeth.Models.Usuario;
+import com.santos.firestoremeth.Persistencia.UsuarioDAO;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -156,18 +157,21 @@ public class FirebaseMethods {
 
         //newNoteRef = db.collection(nodo).document("hi").collection("maiz").document();
 
+        //0 = TITULO
+        //1 = DESCRIPCION
+        //2 = OTRA
+        //3 = URL
+        //4 = ID_CURSO
+
         Notas nota = new Notas();
         nota.setTituloNota(datos[0]);
         nota.setDescripcionNota(datos[1]);
         nota.setNombreTemaNota(datos[2]);
-        nota.setUrl_foto(datos[6]);
+        nota.setUrl_foto(datos[3]);
         nota.setIdNota(newNoteRef.getId());
-        nota.setKey("1");
-        nota.setUserName(datos[3]);
-        nota.setUserPhoto(datos[4]);
-        nota.setUserEmail(datos[5]);
-        nota.setId_user_settings(datos[7]);
-        nota.setId_curso(datos[8]);
+        nota.setId_user_settings(UsuarioDAO.getInstancia().getKeyUsuario());
+        nota.setId_curso(datos[4]);
+
 
         newNoteRef.set(nota).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -266,7 +270,7 @@ public class FirebaseMethods {
     public void crearTareaGrupal(List<String> datos, String... args) {
         TareasG tareasG = new TareasG();
         tareasG.setId_tarea(newNoteRef.getId());
-        tareasG.setId_admin(userID);
+        tareasG.setId_admin(UsuarioDAO.getInstancia().getKeyUsuario());
         tareasG.setNombre_curso(args[0]);
         tareasG.setTitulo(args[1]);
         tareasG.setDescripcion(args[2]);

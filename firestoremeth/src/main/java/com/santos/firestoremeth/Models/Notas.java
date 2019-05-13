@@ -18,29 +18,10 @@ public class Notas implements Parcelable {
     private String nombreTemaNota;
     private String url_foto;
     private String idNota;
-    private String key;
-    private String userName;
-    private String userPhoto;
-    private String userEmail;
     private String id_user_settings;
     private String id_curso;
 
     public Notas() {
-    }
-
-    public Notas(String tituloNota, String descripcionNota, Date timestamp, String nombreTemaNota, String url_foto, String idNota, String key, String userName, String userPhoto, String userEmail, String id_user_settings, String id_curso) {
-        this.tituloNota = tituloNota;
-        this.descripcionNota = descripcionNota;
-        this.timestamp = timestamp;
-        this.nombreTemaNota = nombreTemaNota;
-        this.url_foto = url_foto;
-        this.idNota = idNota;
-        this.key = key;
-        this.userName = userName;
-        this.userPhoto = userPhoto;
-        this.userEmail = userEmail;
-        this.id_user_settings = id_user_settings;
-        this.id_curso = id_curso;
     }
 
     protected Notas(Parcel in) {
@@ -49,10 +30,6 @@ public class Notas implements Parcelable {
         nombreTemaNota = in.readString();
         url_foto = in.readString();
         idNota = in.readString();
-        key = in.readString();
-        userName = in.readString();
-        userPhoto = in.readString();
-        userEmail = in.readString();
         id_user_settings = in.readString();
         id_curso = in.readString();
     }
@@ -117,38 +94,6 @@ public class Notas implements Parcelable {
         this.idNota = idNota;
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserPhoto() {
-        return userPhoto;
-    }
-
-    public void setUserPhoto(String userPhoto) {
-        this.userPhoto = userPhoto;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
     public String getId_user_settings() {
         return id_user_settings;
     }
@@ -166,24 +111,6 @@ public class Notas implements Parcelable {
     }
 
     @Override
-    public String toString() {
-        return "Notas{" +
-                "tituloNota='" + tituloNota + '\'' +
-                ", descripcionNota='" + descripcionNota + '\'' +
-                ", timestamp=" + timestamp +
-                ", nombreTemaNota='" + nombreTemaNota + '\'' +
-                ", url_foto='" + url_foto + '\'' +
-                ", idNota='" + idNota + '\'' +
-                ", key='" + key + '\'' +
-                ", userName='" + userName + '\'' +
-                ", userPhoto='" + userPhoto + '\'' +
-                ", userEmail='" + userEmail + '\'' +
-                ", id_user_settings='" + id_user_settings + '\'' +
-                ", id_curso='" + id_curso + '\'' +
-                '}';
-    }
-
-    @Override
     public int describeContents() {
         return 0;
     }
@@ -195,10 +122,6 @@ public class Notas implements Parcelable {
         dest.writeString(nombreTemaNota);
         dest.writeString(url_foto);
         dest.writeString(idNota);
-        dest.writeString(key);
-        dest.writeString(userName);
-        dest.writeString(userPhoto);
-        dest.writeString(userEmail);
         dest.writeString(id_user_settings);
         dest.writeString(id_curso);
     }

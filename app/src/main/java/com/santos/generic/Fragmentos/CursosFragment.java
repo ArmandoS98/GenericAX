@@ -1,7 +1,9 @@
 package com.santos.generic.Fragmentos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,17 +20,25 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.santos.firestoremeth.FirebaseMethods;
 import com.santos.firestoremeth.Models.Cursos;
+import com.santos.firestoremeth.Persistencia.UsuarioDAO;
+import com.santos.generic.Activities.NuevoCursooActivity;
 import com.santos.generic.Adapters.AdaptadorCursos;
 import com.santos.generic.R;
 import com.victor.loading.rotate.RotateLoading;
 
 import java.util.ArrayList;
 
+import javax.annotation.Nullable;
+
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 import static com.santos.firestoremeth.Nodos.IDENTIFICADOR_USUARIO;
 import static com.santos.firestoremeth.Nodos.NODO_CURSOS;
 
@@ -70,6 +80,8 @@ public class CursosFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cursos, container, false);
         //mFirebaseMethods = new FirebaseMethods(getContext(), NODO_CURSOS);
+        db = FirebaseFirestore.getInstance();
+
         mRotateLoading = view.findViewById(R.id.rotateloading);
         mRotateLoading.start();
 
@@ -82,7 +94,7 @@ public class CursosFragment extends Fragment {
     }
 
     private void getDocumentsInf() {
-        db = FirebaseFirestore.getInstance();
+
 
         notesCollectionRef = db.collection(NODO_CURSOS);
 
@@ -145,8 +157,53 @@ public class CursosFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nuevo_curso:
+                startActivity(new Intent(getContext(), NuevoCursooActivity.class));
+
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        db.collection(NODO_CURSOS)
+                .whereEqualTo(IDENTIFICADOR_USUARIO, UsuarioDAO.getInstancia().getKeyUsuario())
+                .addSnapshotListener((value, e) -> {
+                    if (e != null) {
+                        Log.d(TAG, "onEvent: llego");
+                        return;
+                    }
+
+                    if (mCursos.size() == 0) {
+                        mCursos.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            Cursos cursos = doc.toObject(Cursos.class);
+                            mCursos.add(cursos);
+                        }
+                    } else {
+                        mCursos.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            Cursos cursos = doc.toObject(Cursos.class);
+                            mCursos.add(cursos);
+                        }
+                    }
+
+                    mAdaptadorNotas.notifyDataSetChanged();
+                });
+    }
+
+    @Override
+    public void onStart() {
+
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+       /* if (listenerRegistration != null) {
+            listenerRegistration.remove();
+        }*/
+        super.onStop();
     }
 }

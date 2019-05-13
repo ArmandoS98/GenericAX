@@ -41,6 +41,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.santos.firestoremeth.FirebaseMethods;
+import com.santos.firestoremeth.Persistencia.UsuarioDAO;
 import com.santos.generic.R;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -388,7 +389,7 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
         return true;
     }
 
-    private void crearNuevoAlumno(String nombre, String apellidos, String edad) {
+    private void crearNuevoAlumno(String titulo, String descripcion, String otra) {
         //firebaseMethods.registrarNuevoEmail(correo,"123456789");
 
         final StorageReference fileReference = mStorageReference.child(firebaseUser.getUid() + getDate() + ".jpg");
@@ -413,14 +414,10 @@ public class NotasActivity extends AppCompatActivity implements View.OnClickList
                     url_imagen = FOTO1;
 
                 firebaseMethods.nuevaNota(
-                        nombre,
-                        apellidos,
-                        edad,
-                        firebaseUser.getDisplayName(),
-                        firebaseUser.getPhotoUrl().toString(),
-                        firebaseUser.getEmail(),
+                        titulo,
+                        descripcion,
+                        otra,
                         url_imagen,
-                        firebaseUser.getUid(),
                         id_curso);
 
                 finish();

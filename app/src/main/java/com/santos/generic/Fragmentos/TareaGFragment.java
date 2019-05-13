@@ -45,12 +45,12 @@ public class TareaGFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tarea_g, container, false);
         mTareaRepository = new TareaRepository(getContext());
         mRecyclerView = view.findViewById(R.id.recycler_tareas);
-        initRecyclerView();
-        retrieveTareas();
+        /*initRecyclerView();
+        retrieveTareas();*/
         return view;
     }
 
-    private void retrieveTareas() {
+   /* private void retrieveTareas() {
         mTareaRepository.retriveTasks().observe(this, tasksGS -> {
             if (mTasksGS.size() > 0) {
                 mTasksGS.clear();
@@ -90,5 +90,5 @@ public class TareaGFragment extends Fragment {
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
             deleteTask(mTasksGS.get(viewHolder.getAdapterPosition()));
         }
-    };
+    };*/
 }

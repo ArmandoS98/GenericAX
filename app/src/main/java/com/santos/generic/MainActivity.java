@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -13,6 +14,7 @@ import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +29,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.santos.firestoremeth.Logica.LNota;
+import com.santos.firestoremeth.Logica.LUsuario;
 import com.santos.firestoremeth.Models.Cursos;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Activities.LoginActivity;
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements
         IDatos,
         View.OnClickListener {
 
+    private static final String TAG = "MainActivity";
     // Vistas
     private Fragment fragmentoGenerico = null;
     private Toolbar toolbar;
@@ -169,7 +174,8 @@ public class MainActivity extends AppCompatActivity implements
                 navigationDownDrawer(v, "Grupos", new GroupFragment());
                 break;
             case R.id.mo_tareas:
-                navigationDownDrawer(v, "Tareas", new TareaGFragment());
+                //Log.d(TAG, "onClick: " + new LUsuario().obtnerFechaDeCreacion());
+                navigationDownDrawer(v, "Tareas En Grupo", new GroupFragment());
                 break;
             case R.id.mo_recordatorios:
                 startActivity(new Intent(this, PortalWebActivity.class));
@@ -223,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onNotaSeleccionada(Notas notas) {
+    public void onNotaSeleccionada(LNota notas) {
 
     }
 

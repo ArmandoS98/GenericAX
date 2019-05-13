@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.santos.firestoremeth.Logica.LNota;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.R;
@@ -38,7 +39,7 @@ public class EditarFullScreen extends DialogFragment implements View.OnClickList
     private IDatos iMainMaestro;
     private Uri mImageUri;
 
-    public static EditarFullScreen newInstance(Notas notas) {
+    public static EditarFullScreen newInstance(LNota notas) {
         EditarFullScreen dialog = new EditarFullScreen();
 
         Bundle args = new Bundle();

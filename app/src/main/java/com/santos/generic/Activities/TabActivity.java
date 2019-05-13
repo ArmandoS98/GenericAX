@@ -34,6 +34,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.santos.firestoremeth.FirebaseMethods;
+import com.santos.firestoremeth.Logica.LNota;
 import com.santos.firestoremeth.Models.ArchivosAniadidos;
 import com.santos.firestoremeth.Models.Cuestionario;
 import com.santos.firestoremeth.Models.Cursos;
@@ -171,26 +172,25 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         //adapter.addFrag(tabTareasFragment, "Notas");
         adapter.addFrag(new NotasFragment(), getString(R.string.titulo_notas));
         adapter.addFrag(new TareasFragment(), getString(R.string.titulo_tareas));
-        adapter.addFrag(new GroupFragment(), getString(R.string.titulo_grupos));
+        //adapter.addFrag(new GroupFragment(), getString(R.string.titulo_grupos));
         viewPager.setAdapter(adapter);
 
 
     }
 
     @Override
-    public void onNotaSeleccionada(Notas notas) {
+    public void onNotaSeleccionada(LNota lNota) {
         Intent intent = new Intent(this, NotaViewActivity.class);
-        intent.putExtra(KEY_NOTAS, notas);
-        String date = "";
+        intent.putExtra(KEY_NOTAS, lNota);
 
-
-        if (notas.getTimestamp().toString() != null) {
+        /*if (notas.getTimestamp().toString() != null) {
             SimpleDateFormat spf = new SimpleDateFormat("dd MMM, yyyy, HH:mm aa");
             date = spf.format(notas.getTimestamp());
         } else {
             date = "Hace unos momentos";
         }
-        intent.putExtra("date", date);
+
+        intent.putExtra("date", date);*/
         intent.putExtra(KEY, id_docuento);
         startActivity(intent);
     }
@@ -288,11 +288,11 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                     NuevaTaskFullScreen mNuevaTaskFullScreen = new NuevaTaskFullScreen();
                     mNuevaTaskFullScreen.setCancelable(false);
                     mNuevaTaskFullScreen.show(getSupportFragmentManager(), "Nueva Tarea");
-                } else if (pos == 0){
+                } else if (pos == 0) {
                     Intent intent = new Intent(TabActivity.this, NotasActivity.class);
                     intent.putExtra(KEY_NOTAS, id_docuento);
                     startActivity(intent);
-                }else if (pos == 2){
+                } else if (pos == 2) {
                     Toast.makeText(this, "Tarea Grupal", Toast.LENGTH_SHORT).show();
                 }
                 break;

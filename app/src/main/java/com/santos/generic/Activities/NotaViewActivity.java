@@ -46,6 +46,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.santos.firestoremeth.FirebaseMethods;
+import com.santos.firestoremeth.Logica.LNota;
 import com.santos.firestoremeth.Models.ArchivosAniadidos;
 import com.santos.firestoremeth.Models.Cuestionario;
 import com.santos.firestoremeth.Models.Cursos;
@@ -106,7 +107,7 @@ public class NotaViewActivity extends AppCompatActivity implements IDatos {
     private String id_nota;
     public static String curso_id;
     private String nombre_nota;
-    private Notas mNote = null;
+    private LNota mNote;
     private String url_imagen;
 
     @Override
@@ -130,12 +131,12 @@ public class NotaViewActivity extends AppCompatActivity implements IDatos {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-            nombre_nota = mNote.getTituloNota();
+            nombre_nota = mNote.getNotas().getTituloNota();
             CollapsingToolbarLayout collapsingToolbar = findViewById(R.id.collapsing_toolbar);
             collapsingToolbar.setTitle(nombre_nota);
 
             toolbar.setNavigationOnClickListener(v -> finish());
-            loadBackdrop(mNote.getUrl_foto());
+            loadBackdrop(mNote.getNotas().getUrl_foto());
 
             mTextViewDescripcion = findViewById(R.id.tv_descripcion_show);
             mTextViewFecha = findViewById(R.id.tv_fecha);
@@ -146,10 +147,18 @@ public class NotaViewActivity extends AppCompatActivity implements IDatos {
             mRecyclerViewArchivos = findViewById(R.id.recyclergenerico_arcivos_agregados);
             mImageButtonArchivo = findViewById(R.id.img_archivo);
 
-            String date = getIntent().getStringExtra("date");
             curso_id = getIntent().getStringExtra(KEY);
-            mTextViewFecha.setText(date);
-            id_nota = mNote.getIdNota();
+            /*String date = getIntent().getStringExtra("date");
+             */
+            //mTextViewFecha.setText(mNote.obtnerFechaDeCreacion());
+
+            try {
+                Toast.makeText(this, mNote.obtnerFechaDeCreacion(), Toast.LENGTH_SHORT).show();
+            } catch (Exception ex) {
+                Log.d(TAG, "onCreate: error: " + ex.getMessage());
+            }
+
+            id_nota = mNote.getKey();
 
             mRecyclerView.setHasFixedSize(true);
             mRecyclerViewArchivos.setHasFixedSize(true);
@@ -161,7 +170,7 @@ public class NotaViewActivity extends AppCompatActivity implements IDatos {
             getImagenAniadidas(id_nota);
             initRecyclerView();
 
-            if (mNote.getId_user_settings().equals(mAuth.getUid())) {
+            if (mNote.getNotas().getId_user_settings().equals(mAuth.getUid())) {
                 mButtonEditarNota.setVisibility(View.VISIBLE);
                 mButtonElimnarNota.setVisibility(View.VISIBLE);
             } else {
@@ -169,7 +178,7 @@ public class NotaViewActivity extends AppCompatActivity implements IDatos {
                 mButtonElimnarNota.setVisibility(View.GONE);
             }
 
-            final Notas finalMNote = mNote;
+            final LNota finalMNote = mNote;
             mButtonEditarNota.setOnClickListener(v -> {
                 EditarFullScreen editar_fullScreen = EditarFullScreen.newInstance(finalMNote);
                 editar_fullScreen.setCancelable(false);
@@ -184,7 +193,7 @@ public class NotaViewActivity extends AppCompatActivity implements IDatos {
 
                 builder.setPositiveButton("SI", (dialog, which) -> {
                     // Do nothing but close the dialog
-                    if (deleteNotaData(finalMNote.getIdNota())) {
+                    if (deleteNotaData(finalMNote.getKey())) {
                         Toast.makeText(this, getString(R.string.mensaje_eleminacion_exitoso), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, getString(R.string.mensaje_eleminacion_fallido), Toast.LENGTH_SHORT).show();
@@ -212,7 +221,7 @@ public class NotaViewActivity extends AppCompatActivity implements IDatos {
                 startActivityForResult(galeriaIntent, GalleriaPick);
             });
 
-            mTextViewDescripcion.setText(mNote.getDescripcionNota());
+            mTextViewDescripcion.setText(mNote.getNotas().getDescripcionNota());
 
         }
     }
@@ -569,7 +578,7 @@ public class NotaViewActivity extends AppCompatActivity implements IDatos {
                         .collection(NODO_NOTAS)
                         .document(id_nota);
 
-                getDeleteMethod(noteRef, i, mNote.getUrl_foto());
+                getDeleteMethod(noteRef, i, mNote.getNotas().getUrl_foto());
                 status = true;
             }
         }
@@ -611,7 +620,7 @@ public class NotaViewActivity extends AppCompatActivity implements IDatos {
 
     //INICIA IDATO CAMPOS
     @Override
-    public void onNotaSeleccionada(Notas notas) {
+    public void onNotaSeleccionada(LNota lNota) {
 
     }
 

@@ -198,7 +198,7 @@ public class DashboardFragment extends Fragment {
 
     private void initRecyclerViewNotas() {
         if (mAdaptadorNotasReal == null) {
-            mAdaptadorNotasReal = new AdaptadorNotas(getContext(), mNotas);
+            //mAdaptadorNotasReal = new AdaptadorNotas(getContext(), mNotas);
         }
 
         mRecyclerViewNotas.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));

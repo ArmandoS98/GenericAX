@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.santos.firestoremeth.Logica.LNota;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Interfaz.IDatos;
 import com.santos.generic.R;
@@ -26,11 +27,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AdaptadorNotas extends RecyclerView.Adapter<AdaptadorNotas.ViewHolder> {
     private static final String TAG = "AdaptadorMaestrosComple";
     private Context mContext;
-    private ArrayList<Notas> alumnos = new ArrayList<>();
+    private ArrayList<LNota> alumnos = new ArrayList<>();
     private IDatos mIDatos;
     private int mSelectedNoteIndex;
 
-    public AdaptadorNotas(Context mContext, ArrayList<Notas> alumnos) {
+    public AdaptadorNotas(Context mContext, ArrayList<LNota> alumnos) {
         this.mContext = mContext;
         this.alumnos = alumnos;
     }
@@ -55,15 +56,15 @@ public class AdaptadorNotas extends RecyclerView.Adapter<AdaptadorNotas.ViewHold
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH);
 
-        Glide.with(mContext)
+        /*Glide.with(mContext)
                 .load(alumnos.get(position).getUrl_foto())
                 .apply(options)
                 .into(viewHolder.mImageView);
 
-        Glide.with(mContext)
+        *//*Glide.with(mContext)
                 .load(alumnos.get(position).getUserPhoto())
                 .apply(options)
-                .into(viewHolder.mCircleImageViewPerfil);
+                .into(viewHolder.mCircleImageViewPerfil);*//*
 
         viewHolder.mteTextViewDescripcion.setText(alumnos.get(position).getDescripcionNota());
         viewHolder.mTextViewTitulo.setText(alumnos.get(position).getTituloNota());
@@ -72,7 +73,7 @@ public class AdaptadorNotas extends RecyclerView.Adapter<AdaptadorNotas.ViewHold
             SimpleDateFormat spf = new SimpleDateFormat("MMM dd");
             String date = spf.format(alumnos.get(position).getTimestamp());
             viewHolder.mTextViewFecha.setText(date);
-        }
+        }*/
     }
 
 
@@ -111,12 +112,6 @@ public class AdaptadorNotas extends RecyclerView.Adapter<AdaptadorNotas.ViewHold
             mSelectedNoteIndex = getAdapterPosition();
             mIDatos.onNotaSeleccionada(alumnos.get(mSelectedNoteIndex));
         }
-    }
-
-    public void updateList(ArrayList<Notas> newLista) {
-        alumnos = new ArrayList<>();
-        alumnos.addAll(newLista);
-        notifyDataSetChanged();
     }
 
 }

@@ -77,8 +77,8 @@ public class NuevaNotaFullScreen extends DialogFragment implements View.OnClickL
     public static NuevaNotaFullScreen newInstance(Notas notas) {
         NuevaNotaFullScreen dialog = new NuevaNotaFullScreen();
 
-        Bundle args = new Bundle();
-        args.putParcelable("notas", notas);
+        Bundle args = new Bundle();/*
+        args.putParcelable("notas", notas);*/
         dialog.setArguments(args);
         return dialog;
     }

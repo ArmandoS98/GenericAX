@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 
+import com.santos.firestoremeth.Logica.LNota;
 import com.santos.firestoremeth.Models.Cuestionario;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Interfaz.IDatos;
@@ -29,7 +30,7 @@ public class NuevoCuestionarioFullScreen extends DialogFragment implements View.
     private TextView mTextViewSave;
     private IDatos iMainMaestro;
 
-    public static NuevoCuestionarioFullScreen newInstance(Notas notas) {
+    public static NuevoCuestionarioFullScreen newInstance(LNota notas) {
         NuevoCuestionarioFullScreen dialog = new NuevoCuestionarioFullScreen();
 
         Bundle args = new Bundle();
