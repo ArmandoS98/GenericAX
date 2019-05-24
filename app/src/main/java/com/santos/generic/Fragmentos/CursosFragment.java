@@ -85,17 +85,18 @@ public class CursosFragment extends Fragment {
         mRotateLoading = view.findViewById(R.id.rotateloading);
         mRotateLoading.start();
 
+        mRecyclerViewConverciones = view.findViewById(R.id.recyclergenerico);
+        getDocumentsInf();
+        initRecyclerView();
+
+        /*
         handler.postDelayed(() -> {
-            mRecyclerViewConverciones = view.findViewById(R.id.recyclergenerico);
-            getDocumentsInf();
-            initRecyclerView();
-        }, 100);
+
+        }, 100);*/
         return view;
     }
 
     private void getDocumentsInf() {
-
-
         notesCollectionRef = db.collection(NODO_CURSOS);
 
         mAuth = FirebaseAuth.getInstance();
