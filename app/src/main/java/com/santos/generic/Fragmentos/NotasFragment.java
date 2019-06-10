@@ -62,6 +62,7 @@ public class NotasFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notas, container, false);
+        db = FirebaseFirestore.getInstance();
         recyclergenerico = view.findViewById(R.id.recyclergenerico);
         mRotateLoading = view.findViewById(R.id.rotateloading);
 
@@ -73,7 +74,6 @@ public class NotasFragment extends Fragment {
     }
 
     private void getAlumnos() {
-        db = FirebaseFirestore.getInstance();
 
         notesCollectionRef = db.collection(NODO_CURSOS)
                 .document(id_docuento)

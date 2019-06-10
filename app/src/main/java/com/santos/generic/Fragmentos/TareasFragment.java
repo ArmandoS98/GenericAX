@@ -73,18 +73,8 @@ public class TareasFragment extends Fragment {
         //VerticalSpacingItemDecorator itemDecorator = new VerticalSpacingItemDecorator(10);
         //mRecyclerView.addItemDecoration(itemDecorator);
         new ItemTouchHelper(itemSimpleCallback).attachToRecyclerView(mRecyclerView);
-        mAdaptadorTareas = new AdaptadorTareas(getContext(), mTasksGS);
+        mAdaptadorTareas = new AdaptadorTareas(getContext(), mTasksGS, true);
         mRecyclerView.setAdapter(mAdaptadorTareas);
-    }
-
-    private void getDataSQLite(View view) {
-        Log.d(TAG, "getDataSQLite: ");
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setHasFixedSize(true);
-        new ItemTouchHelper(itemSimpleCallback).attachToRecyclerView(mRecyclerView);
-        //mAdaptadorTareas = new AdaptadorTareas(getContext(), databaseHelper.getTask());
-        mRecyclerView.setAdapter(mAdaptadorTareas);
-
     }
 
     private void deleteTask(TasksG tasksG) {
