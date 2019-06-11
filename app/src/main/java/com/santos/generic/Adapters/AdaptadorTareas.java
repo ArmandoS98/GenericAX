@@ -49,7 +49,8 @@ public class AdaptadorTareas extends RecyclerView.Adapter<AdaptadorTareas.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         if (flag) {
-            viewHolder.mCardView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fate_transition_animation));
+            viewHolder.mTextViewTitulo.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fate_transition_animation));
+            viewHolder.mCardView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fate_scale_animation));
             viewHolder.mTextViewTitulo.setText(tasksGS.get(i).getTitulo());
             viewHolder.mTextViewContendio.setText(tasksGS.get(i).getDetalle());
             if (tasksGS.get(i).getTimestamp() != null) {
@@ -58,7 +59,8 @@ public class AdaptadorTareas extends RecyclerView.Adapter<AdaptadorTareas.ViewHo
                 viewHolder.mTextViewfecha.setText(date);
             }
         } else {
-            viewHolder.mCardView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fate_transition_animation));
+            viewHolder.mCardView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fate_scale_animation));
+            viewHolder.mTextViewTitulo.setAnimation(AnimationUtils.loadAnimation(context, R.anim.fate_transition_animation));
             viewHolder.mTextViewTitulo.setText(tasksGS.get(i).getTitulo());
             if (tasksGS.get(i).getTimestamp() != null) {
                 SimpleDateFormat spf = new SimpleDateFormat("MMM dd");

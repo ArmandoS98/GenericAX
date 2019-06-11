@@ -20,7 +20,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.santos.firestoremeth.FirebaseMethods;
 import com.santos.firestoremeth.Logica.LNota;
 import com.santos.firestoremeth.Models.Notas;
-import com.santos.firestoremeth.Persistencia.UsuarioDAO;
 import com.santos.generic.Adapters.AdaptadorNotasMaterial;
 import com.santos.generic.R;
 import com.santos.generic.RecyclerDecoration.NotasDecoracion;

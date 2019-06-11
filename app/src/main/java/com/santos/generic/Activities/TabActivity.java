@@ -4,7 +4,13 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,12 +20,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
-
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.santos.firestoremeth.FirebaseMethods;
@@ -40,7 +42,6 @@ import com.santos.firestoremeth.Models.Cuestionario;
 import com.santos.firestoremeth.Models.Cursos;
 import com.santos.firestoremeth.Models.Notas;
 import com.santos.generic.Dialogs.NuevaTaskFullScreen;
-import com.santos.generic.Fragmentos.GroupFragment;
 import com.santos.generic.Fragmentos.NotasFragment;
 import com.santos.generic.Fragmentos.TareasFragment;
 import com.santos.generic.Interfaz.IDatos;
@@ -108,7 +109,7 @@ public class TabActivity extends AppCompatActivity implements IDatos {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
-
+        db = FirebaseFirestore.getInstance();
         mTareaRepository = new TareaRepository(this);
 
         epicDialog = new Dialog(this);
@@ -297,16 +298,17 @@ public class TabActivity extends AppCompatActivity implements IDatos {
                 }
                 break;
             case R.id.action_delete_curso:
-                if (getNotasGrado()) {
-                    /*for (Notas notas : alumnos) {
+                getDeleteTaskAndCuestionarios(NODO_NOTAS);
+                /* if (getNotasGrado()) {
+                 *//*for (Notas notas : alumnos) {
                         if (deleteNotaData(notas.getIdNota(), notas.getUrl_foto())) {
                             Toast.makeText(this, "EXITO", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(this, "No", Toast.LENGTH_SHORT).show();
                         }
-                    }*/
+                    }*//*
                 } else
-                    Toast.makeText(this, getString(R.string.mensaje_eleminacion_fallido), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.mensaje_eleminacion_fallido), Toast.LENGTH_SHORT).show();*/
                 break;
         }
 
@@ -320,42 +322,54 @@ public class TabActivity extends AppCompatActivity implements IDatos {
         super.onStart();
     }
 
-    private boolean getNotasGrado() {
+    private ArrayList<String> url_imagenes = new ArrayList<>();
 
-        db = FirebaseFirestore.getInstance();
-
+    private boolean getDeleteTaskAndCuestionarios(String... args) {
         notesCollectionRef = db.collection(NODO_CURSOS)
                 .document(id_docuento)
-                .collection(NODO_NOTAS);
+                .collection(args[0]);
 
-        Query notesQuery = null;
-        if (mLastQueriedDocument != null) {
-            notesQuery = notesCollectionRef
-                    .whereEqualTo("key", "1")
-                    .startAfter(mLastQueriedDocument);
-        } else {
-            notesQuery = notesCollectionRef
-                    .whereEqualTo("key", "1");
-        }
-
-
-        notesQuery.get().addOnCompleteListener(task -> {
+        notesCollectionRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
 
                 alumnos.clear();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Notas alumno = document.toObject(Notas.class);
                     alumnos.add(alumno);
+//                    notesCollectionRef.document(document.getId()).delete();
                 }
-
 
                 for (int i = 0; i < alumnos.size(); i++) {
-                    getCuestionario(alumnos.get(i).getIdNota());
-                    getImagenAniadidas(alumnos.get(i).getIdNota());
-                    getNotas();
-                }
+                    Toast.makeText(this, alumnos.get(i).getTituloNota(), Toast.LENGTH_SHORT).show();
+                    notesCollectionRef = db.collection(NODO_CURSOS)
+                            .document(id_docuento)
+                            .collection(args[0])
+                            .document(alumnos.get(i).getIdNota())
+                            .collection(NODO_IMAGENES_ANIADIDAS);
 
-                status = true;
+                    notesCollectionRef.get().addOnCompleteListener(task1 -> {
+                        url_imagenes.clear();
+                        for (QueryDocumentSnapshot documentSnapshot : task1.getResult()) {
+                            ArchivosAniadidos archivosAniadidos = documentSnapshot.toObject(ArchivosAniadidos.class);
+                            url_imagenes.add(archivosAniadidos.getUrl());
+                            notesCollectionRef.document(documentSnapshot.getId()).delete();
+                        }
+
+                        for (int i1 = 0; i1 < url_imagenes.size(); i1++) {
+                            mStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(url_imagenes.get(i1));
+                            mStorageReference.delete().addOnSuccessListener(aVoid -> {
+                                // File deleted successfully
+                                Log.e("firebasestorage", "onSuccess: deleted file");
+                                Toast.makeText(getApplicationContext(), getString(R.string.mensaje_eleminacion_exitoso), Toast.LENGTH_SHORT).show();
+                            }).addOnFailureListener(exception -> {
+                                // Uh-oh, an error occurred!
+                                Log.e("firebasestorage", "onFailure: did not delete file");
+                                Toast.makeText(getApplicationContext(), getString(R.string.mensaje_eleminacion_fallido), Toast.LENGTH_SHORT).show();
+                            });
+                        }
+                    });
+
+                }
 
                 if (task.getResult().size() != 0) {
                     mLastQueriedDocument = task.getResult().getDocuments().get(task.getResult().size() - 1);
@@ -391,7 +405,7 @@ public class TabActivity extends AppCompatActivity implements IDatos {
     }
 
     private void getImagenAniadidas(String id_nota) {
-        db = FirebaseFirestore.getInstance();
+//        db = FirebaseFirestore.getInstance();
 
         CollectionReference notesCollectionRef = db
                 .collection(NODO_CURSOS)
